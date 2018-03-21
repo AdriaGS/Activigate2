@@ -51,22 +51,16 @@ public class MainActivity extends AppCompatActivity {
         activityTV = (TextView) findViewById(R.id.activity_tv);
         fitbitButton = (Button) findViewById(R.id.toHistoricButton);
 
-        //toSensingHistoric = new Intent(this, SecondaryActivity.class);
-        //binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
+        // TODO: Load Json2Send
         sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
-        String sensingRecordJson = sharedPreferences.getString("sensingRecord", null);
-        String json2Send = sharedPreferences.getString("json2Send", null);
+        harUtils.setLastSensedActivity(sharedPreferences.getString("lastSensedActivity", ""));
+        Boolean isSensing = sharedPreferences.getBoolean("isSensing", false);
         harUtils.setIsSensing(sharedPreferences.getBoolean("isSensing", false));
-        if (sensingRecordJson != null) {
-            ArrayList<String> sensingRecord = (ArrayList<String>) fromJson(sensingRecordJson,
-                    new TypeToken<ArrayList<String>>() {
-                    }.getType());
-
-            harUtils.setSensingRecord(sensingRecord);
-
-            Log.d("Array Loaded", sensingRecord.toString());
+        if(isSensing) {
+            harManager.init(this, 1);
+            harManager.start(this);
         }
+
     }
 
     protected void onResume() {
@@ -79,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSensing(View view){
         if(!harUtils.getIsSensing()) {
             // Initialize the Human Activity Recognizer Manager
-            harManager.init(this, 0);
+            harManager.init(this, 1);
             // Start the Sensing
             harManager.start(this);
             harUtils.setIsSensing(true);
@@ -111,25 +105,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String sensingRecord = gson.toJson(harUtils.getSensingRecord());
-        editor.putString("sensingRecord", sensingRecord);
-        editor.putBoolean("isSensing", harUtils.getIsSensing());
-        editor.commit();
+        save();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String sensingRecord = gson.toJson(harUtils.getSensingRecord());
-        editor.putString("sensingRecord", sensingRecord);
-        editor.putBoolean("isSensing", harUtils.getIsSensing());
-        editor.commit();
+        save();
     }
 
     private void updateTextView() {
@@ -137,13 +119,21 @@ public class MainActivity extends AppCompatActivity {
         if(harUtils.getSensingRecord().size() > 0) {
             if (harUtils.getIsSensing()) {
                 sensingTV.setText("SENSING");
-                activityTV.setText("Lasted sensed activity: " + HARUtils.getLastSensedValue() +
+                activityTV.setText("Lasted sensed activity: " + harUtils.getLastSensedActivity() +
                         "\n Counter = " + String.valueOf(harUtils.getJson2Send().size()));
             } else {
                 sensingTV.setText("NOT SENSING");
                 activityTV.setText("NO ACTIVITY RECOGNIZED YET");
             }
         }
+    }
+
+    private void save() {
+        sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("lastSensedActivity", harUtils.getLastSensedActivity());
+        editor.putBoolean("isSensing", harUtils.getIsSensing());
+        editor.commit();
     }
 
     public static Object fromJson(String jsonString, Type type) {

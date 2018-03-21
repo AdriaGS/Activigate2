@@ -22,7 +22,7 @@ public class HttpAsyncTask extends AsyncTask<String, Void, String> {
         Log.d("Data sent", "Data was Sent! " + result);
         if(!result.equals("Null")){
             if(harUtils.getJson2Send().size() > 0) {
-                harUtils.getJson2Send().remove(HARUtils.json2Send.size() - 1);
+                harUtils.getJson2Send().remove(harUtils.getJson2Send().size() - 1);
             }
         }
     }

@@ -1,6 +1,7 @@
 package fr.cnrs.ipal.activigate2.HAR;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -23,6 +24,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import fr.cnrs.ipal.activigate2.HAR.HARUtils;
 import fr.cnrs.ipal.activigate2.HAR.HttpAsyncTask;
+import fr.cnrs.ipal.activigate2.MyApplication;
 
 /**
  * Created by adriagil on 6/3/18.
@@ -30,9 +32,9 @@ import fr.cnrs.ipal.activigate2.HAR.HttpAsyncTask;
 
 public class UploadHAR {
 
-    Context mContext;
     static String serverURL = "https://icost.ubismart.org/mobility/store";
     static String houseID   = "97";
+    private static final String HAR_PREFERENCES = "HAR_Preferences";
 
     HARUtils harUtils = new HARUtils();
 
@@ -40,10 +42,11 @@ public class UploadHAR {
 
         Log.d("Connected", "Trying to send the data to Server");
         String json = createJSON(str, houseID);
-        harUtils.getJson2Send().add(0, json);
-        Log.d("Before Sending", String.valueOf(harUtils.getJson2Send().size()));
+        harUtils.addJson2SendValue(0, json);
+        save();
+        Log.d("Size of the JSON2Send", String.valueOf(harUtils.getJson2Send().size()));
         int jsonSize = harUtils.getJson2Send().size();
-        while(jsonSize > 0) {
+        while(jsonSize > 0 && isConnected()) {
             new HttpAsyncTask().execute(harUtils.getJson2Send().get(jsonSize - 1), serverURL);
             jsonSize--;
         }
@@ -111,10 +114,19 @@ public class UploadHAR {
         }
     }
 
-    public boolean isConnected() {
+    private void save() {
+        // TODO: Save Json2Send
+        SharedPreferences sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, MyApplication.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("lastSensedActivity", harUtils.getLastSensedActivity());
+        editor.putBoolean("isSensing", harUtils.getIsSensing());
+        editor.commit();
+    }
+
+    private boolean isConnected() {
 
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) MyApplication.instance.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 

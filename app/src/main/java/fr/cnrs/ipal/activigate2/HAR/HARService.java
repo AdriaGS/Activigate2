@@ -15,6 +15,7 @@ import com.google.android.gms.location.DetectedActivity;
 public class HARService extends IntentService {
 
     UploadHAR uploadActivity = new UploadHAR();
+    HARUtils harUtils = new HARUtils();
     private Markov m = new Markov();
     public static String LOCAL_BROADCAST_NAME = "LOCAL_ACT_RECOGNITION";
     public static String LOCAL_BROADCAST_EXTRA = "RESULT";
@@ -53,7 +54,7 @@ public class HARService extends IntentService {
             String currentActivity = Result.getNameFromType(Result.getActivity());
             Log.d("Activity Recognized", currentActivity);
 
-            HARUtils.sensingRecord.add(currentActivity);
+            harUtils.setLastSensedActivity(currentActivity);
 
             Intent broadcastIntent = new Intent(LOCAL_BROADCAST_NAME);
             broadcastIntent.putExtra(LOCAL_BROADCAST_EXTRA, currentActivity);

@@ -18,15 +18,17 @@ public class HARManager {
     // Stores the PendingIntent used to send activity recognition events back to the app
     private PendingIntent mActivityRecognitionPendingIntent = null;
     // Stores the current instantiation of the activity recognition client
-    private ActivityRecognitionClient mActivityRecognitionClient;
+    private ActivityRecognitionClient mActivityRecognitionClient = null;
 
     public void init(Context context, int interval){
 
         HARUtils.DETECTION_INTERVAL_SECONDS = interval;
 
-        Intent intent = new Intent( context, HARService.class );
-        mActivityRecognitionPendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mActivityRecognitionClient = new ActivityRecognitionClient(context);
+        if(mActivityRecognitionClient == null || mActivityRecognitionPendingIntent == null) {
+            Intent intent = new Intent(context, HARService.class);
+            mActivityRecognitionPendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mActivityRecognitionClient = new ActivityRecognitionClient(context);
+        }
 
     }
 
@@ -45,6 +47,8 @@ public class HARManager {
         if(mActivityRecognitionPendingIntent != null) {
             // Pass the remove request to the remover object
             Task task = mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
+            mActivityRecognitionClient = null;
+            mActivityRecognitionPendingIntent.cancel();
         }
     }
 
