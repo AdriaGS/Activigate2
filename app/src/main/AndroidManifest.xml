@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,6 +25,19 @@
 
         <service android:name=".HAR.HARService" />
 
+        <activity android:name=".View.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="callback"
+                    android:scheme="activigate" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".View.FitbitActivity"></activity>
     </application>
 
 </manifest>

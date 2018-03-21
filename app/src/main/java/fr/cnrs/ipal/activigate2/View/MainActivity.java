@@ -2,6 +2,7 @@ package fr.cnrs.ipal.activigate2.View;
 
 import android.content.Intent;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,20 +14,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 import fr.cnrs.ipal.activigate2.HAR.HARManager;
 import fr.cnrs.ipal.activigate2.HAR.HARService;
 import fr.cnrs.ipal.activigate2.HAR.HARUtils;
+import fr.cnrs.ipal.activigate2.MyApplication;
 import fr.cnrs.ipal.activigate2.R;
 //import ipal.cnrs.fr.activigate_googleapi.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String HAR_PREFERENCES = "HAR_Preferences";
 
     TextView sensingTV;
     TextView activityTV;
     Button fitbitButton;
 
     HARManager harManager = new HARManager();
+    HARUtils harUtils = new HARUtils();
     //private ActivityMainBinding binding;
+
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +51,22 @@ public class MainActivity extends AppCompatActivity {
         activityTV = (TextView) findViewById(R.id.activity_tv);
         fitbitButton = (Button) findViewById(R.id.toHistoricButton);
 
-        fitbitButton.setVisibility(View.INVISIBLE);
-
         //toSensingHistoric = new Intent(this, SecondaryActivity.class);
         //binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
+        String sensingRecordJson = sharedPreferences.getString("sensingRecord", null);
+        String json2Send = sharedPreferences.getString("json2Send", null);
+        harUtils.setIsSensing(sharedPreferences.getBoolean("isSensing", false));
+        if (sensingRecordJson != null) {
+            ArrayList<String> sensingRecord = (ArrayList<String>) fromJson(sensingRecordJson,
+                    new TypeToken<ArrayList<String>>() {
+                    }.getType());
+
+            harUtils.setSensingRecord(sensingRecord);
+
+            Log.d("Array Loaded", sensingRecord.toString());
+        }
     }
 
     protected void onResume() {
@@ -51,26 +76,19 @@ public class MainActivity extends AppCompatActivity {
         updateTextView();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     public void onSensing(View view){
-        if(!HARUtils.isSensing) {
+        if(!harUtils.getIsSensing()) {
             // Initialize the Human Activity Recognizer Manager
             harManager.init(this, 0);
             // Start the Sensing
             harManager.start(this);
-            //Task task = activityRecognitionClient.requestActivityUpdates(TIMER, pendingIntent);
-            HARUtils.isSensing = true;
-            moveTaskToBack(true);
+            harUtils.setIsSensing(true);
+            //moveTaskToBack(true);
         }
         else {
             // Stop the Sensing
             harManager.stop(this);
-            //Task task = activityRecognitionClient.removeActivityUpdates(pendingIntent);
-            HARUtils.isSensing = false;
+            harUtils.setIsSensing(false);
         }
         updateTextView();
     }
@@ -85,20 +103,51 @@ public class MainActivity extends AppCompatActivity {
 
     public void goFitbit(View view){
 
+        Intent toFitbit = new Intent(this, LoginActivity.class);
+        startActivity(toFitbit);
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String sensingRecord = gson.toJson(harUtils.getSensingRecord());
+        editor.putString("sensingRecord", sensingRecord);
+        editor.putBoolean("isSensing", harUtils.getIsSensing());
+        editor.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String sensingRecord = gson.toJson(harUtils.getSensingRecord());
+        editor.putString("sensingRecord", sensingRecord);
+        editor.putBoolean("isSensing", harUtils.getIsSensing());
+        editor.commit();
     }
 
     private void updateTextView() {
 
-        if(HARUtils.sensingRecord.size() > 0) {
-            if (HARUtils.isSensing) {
+        if(harUtils.getSensingRecord().size() > 0) {
+            if (harUtils.getIsSensing()) {
                 sensingTV.setText("SENSING");
-                activityTV.setText("Lasted sensed activity: " + HARUtils.getLastSensedValue());
+                activityTV.setText("Lasted sensed activity: " + HARUtils.getLastSensedValue() +
+                        "\n Counter = " + String.valueOf(harUtils.getJson2Send().size()));
             } else {
                 sensingTV.setText("NOT SENSING");
                 activityTV.setText("NO ACTIVITY RECOGNIZED YET");
             }
         }
+    }
+
+    public static Object fromJson(String jsonString, Type type) {
+        return new Gson().fromJson(jsonString, type);
     }
 }
 

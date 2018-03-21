@@ -42,8 +42,10 @@ public class HARManager {
         if (!servicesConnected(context)) {
             return;
         }
-        // Pass the remove request to the remover object
-        Task task = mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
+        if(mActivityRecognitionPendingIntent != null) {
+            // Pass the remove request to the remover object
+            Task task = mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
+        }
     }
 
     private boolean servicesConnected(Context context) {

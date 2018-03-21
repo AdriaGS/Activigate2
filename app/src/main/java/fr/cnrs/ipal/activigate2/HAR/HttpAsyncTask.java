@@ -8,6 +8,9 @@ import android.util.Log;
  */
 
 public class HttpAsyncTask extends AsyncTask<String, Void, String> {
+
+    HARUtils harUtils = new HARUtils();
+
     @Override
     protected String doInBackground(String... urls) {
 
@@ -18,7 +21,9 @@ public class HttpAsyncTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         Log.d("Data sent", "Data was Sent! " + result);
         if(!result.equals("Null")){
-            HARUtils.json2Send.remove(HARUtils.json2Send.size() - 1);
+            if(harUtils.getJson2Send().size() > 0) {
+                harUtils.getJson2Send().remove(HARUtils.json2Send.size() - 1);
+            }
         }
     }
 }

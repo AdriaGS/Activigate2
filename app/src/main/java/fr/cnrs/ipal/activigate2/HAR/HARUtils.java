@@ -1,5 +1,7 @@
 package fr.cnrs.ipal.activigate2.HAR;
 
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 
 /**
@@ -22,8 +24,32 @@ public class HARUtils {
         return sensingRecord.get(sensingRecord.size() - 1);
     }
 
+    public static void addLastSensedValue(String activity) {
+        sensingRecord.add(activity);
+    }
+
+    public static void setSensingRecord(ArrayList<String> savedRecord) {
+        sensingRecord = savedRecord;
+    }
+
+    public static ArrayList<String> getSensingRecord(){
+        return sensingRecord;
+    }
+
+    public static void setIsSensing(Boolean newValue) {
+        isSensing = newValue;
+    }
+
+    public static boolean getIsSensing() {
+        return isSensing;
+    }
+
     public static ArrayList<String> getJson2Send() {
         return json2Send;
+    }
+
+    public static void setJson2Send(ArrayList<String> json2SendSaved) {
+        json2Send = json2SendSaved;
     }
 
 }

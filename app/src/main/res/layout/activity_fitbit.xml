@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fr.cnrs.ipal.activigate2.View.FitbitActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/getHeartRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Heart Rate"
+            android:layout_margin="20dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:onClick="getHeartRate"/>
+
+        <TextView
+            android:id="@+id/heartRateTV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

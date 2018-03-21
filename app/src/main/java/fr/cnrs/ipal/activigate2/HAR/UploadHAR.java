@@ -21,8 +21,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import ipal.cnrs.fr.activigate_googleapi.Activigate.HAR.HARUtils;
-import ipal.cnrs.fr.activigate_googleapi.Activigate.HAR.HttpAsyncTask;
+import fr.cnrs.ipal.activigate2.HAR.HARUtils;
+import fr.cnrs.ipal.activigate2.HAR.HttpAsyncTask;
 
 /**
  * Created by adriagil on 6/3/18.
@@ -34,15 +34,17 @@ public class UploadHAR {
     static String serverURL = "https://icost.ubismart.org/mobility/store";
     static String houseID   = "97";
 
+    HARUtils harUtils = new HARUtils();
+
     public void export2ICOST(String str) {
 
         Log.d("Connected", "Trying to send the data to Server");
         String json = createJSON(str, houseID);
-        HARUtils.json2Send.add(0, json);
-        Log.d("Before Sending", String.valueOf(HARUtils.json2Send.size()));
-        int jsonSize = HARUtils.json2Send.size();
+        harUtils.getJson2Send().add(0, json);
+        Log.d("Before Sending", String.valueOf(harUtils.getJson2Send().size()));
+        int jsonSize = harUtils.getJson2Send().size();
         while(jsonSize > 0) {
-            new HttpAsyncTask().execute(HARUtils.json2Send.get(jsonSize - 1), serverURL);
+            new HttpAsyncTask().execute(harUtils.getJson2Send().get(jsonSize - 1), serverURL);
             jsonSize--;
         }
     }
