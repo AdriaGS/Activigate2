@@ -3,11 +3,13 @@ package fr.cnrs.ipal.activigate2.HAR;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
- * Created by adriagil on 6/3/18.
+ * Created by adria on 22/3/18.
  */
 
-public class HttpAsyncTask extends AsyncTask<String, Void, String> {
+public class SendBuffer extends AsyncTask<String, Void, String> {
 
     HARUtils harUtils = new HARUtils();
 
@@ -19,11 +21,14 @@ public class HttpAsyncTask extends AsyncTask<String, Void, String> {
     // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(String result) {
-        Log.d("Data sent", "Data was Sent! " + result);
         if(!result.equals("Null")){
-            if(harUtils.getJson2Send().size() > 0) {
-                harUtils.getJson2Send().remove(harUtils.getJson2Send().size() - 1);
+            ArrayList<String> jsonRecord = harUtils.getJson2Send();
+            if(jsonRecord.size() > 0) {
+                jsonRecord.remove(jsonRecord.size() - 1);
+                harUtils.setJson2Send(jsonRecord);
             }
+            harUtils.setCanSend(true);
         }
     }
+
 }

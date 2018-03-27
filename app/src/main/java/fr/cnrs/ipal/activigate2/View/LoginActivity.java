@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     //then die
                     finish();
                 }
+                Log.e("Expires in", expires_in);
                 oAuthToken.setTokenType(token_type);
                 oAuthToken.setAccessToken(access_token);
                 oAuthToken.setScope(scope);
@@ -85,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void makeAuthorizationRequest() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.fitbit.com/oauth2/authorize?response_type=token" +
-                "&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI + "&scope=activity%20heartrate&expires_in=604800"));
+                "&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI + "&scope=activity%20heartrate%20sleep&expires_in=604800"));
         startActivity(intent);
         finish();
 
@@ -93,10 +94,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private String getAccessToken(Uri data) {
         String str = data.toString();
-        int indexOfHash = str.toString().indexOf("#");
+        int indexOfHash = str.indexOf("#");
         String subStr = str.substring(indexOfHash+1, str.length());
         String sStr = subStr.substring(0,subStr.indexOf("&"));
-        String ssStr = subStr.substring(sStr.indexOf("="), sStr.length());
+        String ssStr = subStr.substring(sStr.indexOf("=")+1, sStr.length());
         return ssStr;
     }
 

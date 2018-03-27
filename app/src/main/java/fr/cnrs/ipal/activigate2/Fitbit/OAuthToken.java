@@ -44,7 +44,7 @@ public class OAuthToken {
     public void save() {
         Log.e(TAG, "Savng the following element " + this);
         //update expired_after
-        expiredAfterMilli = System.currentTimeMillis() + expiresIn * 1000;
+        expiredAfterMilli = System.currentTimeMillis() + expiredAfterMilli;
         Log.e(TAG, "Savng the following element and expiredAfterMilli =" + expiredAfterMilli+" where now="+System.currentTimeMillis()+" and expired in ="+ expiresIn);
         SharedPreferences sp = MyApplication.instance.getSharedPreferences(OAUTH_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
@@ -120,6 +120,8 @@ public class OAuthToken {
                 long now = System.currentTimeMillis();
 
                 Log.e(TAG, "Delta : " + (now - expiredAfter));
+                Log.e(TAG, String.valueOf(now));
+                Log.e(TAG, String.valueOf(expiredAfter));
                 if (expiredAfter == 0 || now > expiredAfter) {
                     Log.e(TAG, "expiredAfter==0||now>expiredAfter, token has expired");
                     //flush token in the SP

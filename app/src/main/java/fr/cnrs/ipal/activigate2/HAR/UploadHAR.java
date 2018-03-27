@@ -1,7 +1,6 @@
 package fr.cnrs.ipal.activigate2.HAR;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -22,8 +21,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import fr.cnrs.ipal.activigate2.HAR.HARUtils;
-import fr.cnrs.ipal.activigate2.HAR.HttpAsyncTask;
 import fr.cnrs.ipal.activigate2.MyApplication;
 
 /**
@@ -34,25 +31,44 @@ public class UploadHAR {
 
     static String serverURL = "https://icost.ubismart.org/mobility/store";
     static String houseID   = "97";
-    private static final String HAR_PREFERENCES = "HAR_Preferences";
 
     HARUtils harUtils = new HARUtils();
 
     public void export2ICOST(String str) {
 
-        Log.d("Connected", "Trying to send the data to Server");
-        String json = createJSON(str, houseID);
-        harUtils.addJson2SendValue(0, json);
-        save();
-        Log.d("Size of the JSON2Send", String.valueOf(harUtils.getJson2Send().size()));
-        int jsonSize = harUtils.getJson2Send().size();
-        while(jsonSize > 0 && isConnected()) {
-            new HttpAsyncTask().execute(harUtils.getJson2Send().get(jsonSize - 1), serverURL);
-            jsonSize--;
+        ArrayList<String> json = createJSON(str, houseID);
+        harUtils.setLastJson(json);
+
+        if(isConnected()) {
+            new SendCurrent().execute(json.get(1), serverURL);
+
+            final Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    harUtils.setThreadRunning(true);
+                    ArrayList<String> jsonRecord = harUtils.getJson2Send();
+                    while (harUtils.getJson2Send().size() > 0) {
+                        if (harUtils.getCanSend()) {
+                            new SendBuffer().execute(jsonRecord.get(harUtils.getJson2Send().size() - 1), serverURL);
+                            harUtils.setCanSend(false);
+                        }
+                    }
+                    harUtils.setThreadRunning(false);
+                    return;
+                }
+            };
+            if(!harUtils.getThreadRunning()) {
+                thread.start();
+            }
+        }
+        else {
+            harUtils.onSending(false);
         }
     }
 
-    private String createJSON(String activity, String houseId) {
+    private ArrayList<String> createJSON(String activity, String houseId) {
+
+        ArrayList<String> returningArray = new ArrayList<>();
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String date = String.valueOf(timestamp.getTime());
@@ -74,7 +90,10 @@ public class UploadHAR {
         Gson gson = new Gson();
         String json = gson.toJson(payload);
 
-        return json;
+        returningArray.add(date);
+        returningArray.add(json);
+
+        return returningArray;
     }
 
     public static String upload(String json, String serverUrl) {
@@ -102,7 +121,7 @@ public class UploadHAR {
             // 6. Execute POST request to the given URL
             HttpResponse httpResponse = httpclient.execute(httpPost);
 
-            // 9. receive response as inputStream
+            // 7. receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
 
             //Log.d("JSON Upload Result", convertInputStreamToString(inputStream));
@@ -112,15 +131,6 @@ public class UploadHAR {
             Log.d("InputStream", e.toString());
             return "Null";
         }
-    }
-
-    private void save() {
-        // TODO: Save Json2Send
-        SharedPreferences sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, MyApplication.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("lastSensedActivity", harUtils.getLastSensedActivity());
-        editor.putBoolean("isSensing", harUtils.getIsSensing());
-        editor.commit();
     }
 
     private boolean isConnected() {

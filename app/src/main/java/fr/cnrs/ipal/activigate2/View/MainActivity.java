@@ -53,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: Load Json2Send
         sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
-        harUtils.setLastSensedActivity(sharedPreferences.getString("lastSensedActivity", ""));
+        harUtils.setJson2Send(harUtils.string2Array(sharedPreferences.getString("json2Send", null)));
+        harUtils.setLastSensedActivity(sharedPreferences.getString("lastSensedActivity", null));
         Boolean isSensing = sharedPreferences.getBoolean("isSensing", false);
-        harUtils.setIsSensing(sharedPreferences.getBoolean("isSensing", false));
+        harUtils.setIsSensing(isSensing);
         if(isSensing) {
             harManager.init(this, 1);
             harManager.start(this);
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSensing(View view){
         if(!harUtils.getIsSensing()) {
             // Initialize the Human Activity Recognizer Manager
-            harManager.init(this, 1);
+            harManager.init(this, 30);
             // Start the Sensing
             harManager.start(this);
             harUtils.setIsSensing(true);
@@ -116,15 +117,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateTextView() {
 
-        if(harUtils.getSensingRecord().size() > 0) {
-            if (harUtils.getIsSensing()) {
-                sensingTV.setText("SENSING");
-                activityTV.setText("Lasted sensed activity: " + harUtils.getLastSensedActivity() +
-                        "\n Counter = " + String.valueOf(harUtils.getJson2Send().size()));
-            } else {
-                sensingTV.setText("NOT SENSING");
-                activityTV.setText("NO ACTIVITY RECOGNIZED YET");
-            }
+        if (harUtils.getIsSensing()) {
+            sensingTV.setText("SENSING");
+            activityTV.setText("Lasted sensed activity: " + harUtils.getLastSensedActivity());
+        }
+        else {
+            sensingTV.setText("NOT SENSING");
+            activityTV.setText("NO ACTIVITY RECOGNIZED YET");
         }
     }
 
