@@ -13,54 +13,411 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/heartRateTV"
-                android:layout_width="match_parent"
+                android:id="@+id/dayTV"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="20dp"
+                android:layout_weight="5"
+                android:layout_gravity="center_vertical"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
                 android:text="TODAY"/>
-            <Button
-                android:id="@+id/getHeartRate"
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
+
+                <Button
+                    android:id="@+id/getHeartRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/update_icon"
+                    android:onClick="updateData"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Update Data"
-                android:layout_margin="20dp"
-                android:gravity="center_horizontal|center_vertical"
-                android:onClick="updateData"/>
+                android:text="ACTIVITY"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_margin="10dp"/>
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="0dp"
+               android:layout_weight="100"
+               android:orientation="horizontal"
+               android:layout_marginLeft="10dp"
+               android:layout_marginRight="10dp"
+               android:layout_marginBottom="10dp">
+
+               <RelativeLayout
+                   android:id="@+id/relativeLO"
+                   android:layout_width="wrap_content"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:gravity="center">
+
+                   <ProgressBar
+                       android:id="@+id/stepsProgress"
+                       android:layout_width="wrap_content"
+                       android:layout_height="match_parent"/>
+
+                   <TextView
+                       android:background="#00000000"
+                       android:layout_height="wrap_content"
+                       android:layout_width="wrap_content"
+                       android:layout_alignLeft="@id/stepsProgress"
+                       android:layout_alignTop="@id/stepsProgress"
+                       android:layout_alignRight="@id/stepsProgress"
+                       android:layout_alignBottom="@id/stepsProgress" />
+
+               </RelativeLayout>
+
+               <LinearLayout
+                   android:layout_width="0dp"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:orientation="vertical"
+                   android:background="@drawable/border_activity">
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1"
+                       android:layout_margin="5dp"
+                       android:orientation="horizontal">
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_gravity="center_vertical|left"
+                           android:text=" - Sedentary: "/>
+
+                       <TextView
+                           android:id="@+id/sedentaryMinTV"
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_gravity="center_vertical|right"/>
+
+                   </LinearLayout>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1"
+                       android:layout_margin="5dp"
+                       android:orientation="horizontal">
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_gravity="center_vertical|left"
+                           android:text=" - Lightly Active: "/>
+
+                       <TextView
+                           android:id="@+id/lightlyActiveMinTV"
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_gravity="center_vertical|right"/>
+
+                   </LinearLayout>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1"
+                       android:layout_margin="5dp"
+                       android:orientation="horizontal">
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_gravity="center_vertical|left"
+                           android:text=" - Very Active: "/>
+
+                       <TextView
+                           android:id="@+id/veryActiveMinTV"
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_gravity="center_vertical|right"/>
+
+                   </LinearLayout>
+
+               </LinearLayout>
+
+           </LinearLayout>
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2">
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="HEART RATE"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_margin="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|left"
+                    android:text=" - Resting Heart Rate:  "/>
+
+                <TextView
+                    android:id="@+id/restingHRTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|right"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="100"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/border_heartRate">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="bottom|center"
+                        android:text="Out of Range" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="bottom|center"
+                        android:text="Fat Burn"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="bottom|center"
+                        android:text="Cardio"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="bottom|center"
+                        android:text="Peak"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/heartRateZonesBar"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/outOfRangeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:textAlignment="gravity"
+                        android:textStyle="bold"
+                        android:text="10%"
+                        android:textSize="20dp"/>
+                    <TextView
+                        android:id="@+id/fatBurnTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:textAlignment="gravity"
+                        android:textStyle="bold"
+                        android:text="10%"
+                        android:textSize="20dp"/>
+                    <TextView
+                        android:id="@+id/cardioTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAlignment="gravity"
+                        android:textStyle="bold"
+                        android:text="10%"
+                        android:textSize="20dp"/>
+                    <TextView
+                        android:id="@+id/peakTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAlignment="gravity"
+                        android:textStyle="bold"
+                        android:text="10%"
+                        android:textSize="20dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2">
+            android:layout_weight="2"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SLEEP"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|left"
+                            android:text=" - Duration: "/>
+
+                        <TextView
+                            android:id="@+id/sleepDurationTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|left"
+                            android:text=" - Efficiency: "/>
+
+                        <TextView
+                            android:id="@+id/efficiencyTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|left"
+                        android:text=" - Awakenings: "/>
+
+                    <TextView
+                        android:id="@+id/awakeningCountTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|right"/>
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2">
-
-        </LinearLayout>
-
-
-
-
 
     </LinearLayout>
 
