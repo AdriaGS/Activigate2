@@ -7,6 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,16 +48,19 @@ public class FitbitActivity extends AppCompatActivity {
 
     private void getHeartRate() {
         String myUri = "https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json";
+        heartRateData = "";
         new getDatafromAPI().execute(myUri, authorization, "0");
     }
 
     private void getActivity() {
         String myUri = "https://api.fitbit.com/1/user/-/activities/date/today.json";
+        activityData = "";
         new getDatafromAPI().execute(myUri, authorization, "1");
     }
 
     private void getSleep() {
         String myUri = "https://api.fitbit.com/1/user/-/sleep/date/today.json";
+        sleepData = "";
         new getDatafromAPI().execute(myUri, authorization, "2");
     }
 
@@ -90,10 +100,27 @@ public class FitbitActivity extends AppCompatActivity {
 
     }
 
-    public void updateDataView(String data) {
+    public void updateDataView() {
 
-        if (pd.isShowing()){
+        if (!heartRateData.equals("") && !activityData.equals("") && !sleepData.equals("") && pd.isShowing()) {
             pd.dismiss();
+
+            try {
+                JSONObject activityJson = new JSONObject(activityData);
+                JSONArray heartZones = activityJson.getJSONArray("heartRateZones");
+                int restingHeartRate = activityJson.getInt("restingHeartRate");
+                int sedentaryMin = activityJson.getInt("sedentaryMinutes");
+                int lightlyActiveMin = activityJson.getInt("lightlyActiveMinutes");
+                int veryActiveMin = activityJson.getInt("veryActiveMinutes");
+                int steps = activityJson.getInt("steps");
+                int stepsGoal = activityJson.getJSONObject("goals").getInt("steps");
+
+
+
+            } catch (JSONException e) {
+                Log.e("JSON Exception", e.toString());
+            }
+
         }
 
     }
@@ -124,7 +151,7 @@ public class FitbitActivity extends AppCompatActivity {
 
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line + "\n");
-                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+                    Log.d("Response: ", "> " + line);
 
                 }
                 switch (Integer.parseInt(urls[2])) {
@@ -167,7 +194,7 @@ public class FitbitActivity extends AppCompatActivity {
             if(result == null) {
                 Log.e("Error", "Error on data reception");
             }
-            updateDataView(result);
+            updateDataView();
         }
 
     }
