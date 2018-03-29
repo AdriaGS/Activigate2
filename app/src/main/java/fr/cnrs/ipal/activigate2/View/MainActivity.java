@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     public void onSensing(View view){
         if(!harUtils.getIsSensing()) {
             // Initialize the Human Activity Recognizer Manager
-            sensingButton.setBackground(getResources().getDrawable(R.drawable.stop_default));
             harManager.init(this, 30);
             // Start the Sensing
             harManager.start(this);
@@ -86,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             // Stop the Sensing
-            sensingButton.setBackground(getResources().getDrawable(R.drawable.start_default));
             harManager.stop(this);
             harUtils.setIsSensing(false);
         }
@@ -123,11 +121,13 @@ public class MainActivity extends AppCompatActivity {
     private void updateTextView() {
 
         if (harUtils.getIsSensing()) {
-            sensingTV.setText("SENSING");
+            sensingButton.setBackground(getResources().getDrawable(R.drawable.stop_default));
+            sensingTV.setText("Stop Recognition");
             activityTV.setText("Lasted sensed activity: " + harUtils.getLastSensedActivity());
         }
         else {
-            sensingTV.setText("NOT SENSING");
+            sensingButton.setBackground(getResources().getDrawable(R.drawable.start_default));
+            sensingTV.setText("Start Recognition");
             activityTV.setText("NO ACTIVITY RECOGNIZED YET");
         }
     }

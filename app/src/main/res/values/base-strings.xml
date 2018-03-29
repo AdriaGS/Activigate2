@@ -20,14 +20,14 @@
         <![CDATA[
         
             
-                This app starts reading the phone sensor values and periodically sends them to the Ubismart server. You can press the logo to start and stop the readings.
+                Welcome to Activigate! This app, in the City4Age project framework, aims to use wereable sensors data for outdoor monitoring of elderly people.\n
 
         ]]>
     </string>
-    <string name="sensing_Message">
+    <string name="appwork_message">
         <![CDATA[
 
-                ACTIVITY SENSED
+                Version 0.2
 
         ]]>
     </string>
