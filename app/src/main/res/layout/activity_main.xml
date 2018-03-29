@@ -33,17 +33,7 @@
                     android:layout_margin="10dp"
                     android:layout_gravity="center_vertical"/>
 
-                <Button
-                    android:id="@+id/toHistoricButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/toHistoryButton"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_alignParentRight="true"
-                    android:onClick="goFitbit"
-                    android:layout_gravity="center_vertical"/>
+
 
             </LinearLayout>
         </RelativeLayout>
@@ -59,24 +49,91 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:text="@string/intro_message" />
 
-        <Button
-            android:id="@+id/ReadingButton"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
             android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:onClick="onSensing"
-            android:background="@drawable/activigate_logo" />
-        <TextView
-            android:id="@+id/sensingTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="NOT SENSING"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="horizontal"
+                android:gravity="bottom">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/sensingButton"
+                        android:layout_width="@dimen/button_size"
+                        android:layout_height="@dimen/button_size"
+                        android:background="@drawable/start_default"
+                        android:layout_margin="@dimen/fab_margin"
+                        android:onClick="onSensing"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/fitbitDataButton"
+                        android:layout_width="@dimen/button_size"
+                        android:layout_height="@dimen/button_size"
+                        android:background="@drawable/fitbit_app_icon"
+                        android:layout_margin="@dimen/fab_margin"
+                        android:onClick="goFitbit" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="top">
+
+                <TextView
+                    android:id="@+id/sensingTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Activity Recognition"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center" />
+
+
+                <TextView
+                    android:id="@+id/fitbitTv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Fitbit Data"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/activity_tv"
@@ -84,8 +141,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="NO ACTIVITY RECOGNIZED YET"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="10dp"
             android:textSize="20dp"
             android:layout_gravity="center_horizontal"/>
 

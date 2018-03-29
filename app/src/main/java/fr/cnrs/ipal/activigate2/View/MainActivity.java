@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     TextView sensingTV;
     TextView activityTV;
-    Button fitbitButton;
+    ImageButton fitbitButton;
+    ImageButton sensingButton;
 
     HARManager harManager = new HARManager();
     HARUtils harUtils = new HARUtils();
@@ -49,15 +51,16 @@ public class MainActivity extends AppCompatActivity {
         // Assigning TextView to variables
         sensingTV = (TextView) findViewById(R.id.sensingTextView);
         activityTV = (TextView) findViewById(R.id.activity_tv);
-        fitbitButton = (Button) findViewById(R.id.toHistoricButton);
+        fitbitButton = (ImageButton) findViewById(R.id.fitbitDataButton);
+        sensingButton = (ImageButton) findViewById(R.id.sensingButton);
 
-        // TODO: Load Json2Send
         sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
         harUtils.setJson2Send(harUtils.string2Array(sharedPreferences.getString("json2Send", null)));
         harUtils.setLastSensedActivity(sharedPreferences.getString("lastSensedActivity", null));
         Boolean isSensing = sharedPreferences.getBoolean("isSensing", false);
         harUtils.setIsSensing(isSensing);
         if(isSensing) {
+            sensingButton.setBackground(getResources().getDrawable(R.drawable.stop_default));
             harManager.init(this, 1);
             harManager.start(this);
         }
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSensing(View view){
         if(!harUtils.getIsSensing()) {
             // Initialize the Human Activity Recognizer Manager
+            sensingButton.setBackground(getResources().getDrawable(R.drawable.stop_default));
             harManager.init(this, 30);
             // Start the Sensing
             harManager.start(this);
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             // Stop the Sensing
+            sensingButton.setBackground(getResources().getDrawable(R.drawable.start_default));
             harManager.stop(this);
             harUtils.setIsSensing(false);
         }
