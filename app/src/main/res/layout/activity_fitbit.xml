@@ -17,35 +17,22 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:background="@drawable/oneside_line">
 
             <TextView
                 android:id="@+id/dayTV"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="7"
-                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_vertical|right"
+                android:gravity="right"
                 android:textSize="25dp"
                 android:textStyle="bold"
-                android:layout_marginLeft="10dp"
-                android:text="TODAY"/>
+                android:text="TODAY" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_marginRight="5dp">
-
-                <Button
-                    android:id="@+id/getHeartRate"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/update_icon"
-                    android:onClick="updateData"/>
-            </LinearLayout>
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,7 +46,6 @@
                 android:layout_weight="1"
                 android:text="ACTIVITY"
                 android:textSize="20dp"
-                android:gravity="center"
                 android:textStyle="bold"
                 android:layout_margin="10dp"/>
 
@@ -68,8 +54,6 @@
                android:layout_height="0dp"
                android:layout_weight="100"
                android:orientation="horizontal"
-               android:layout_marginLeft="10dp"
-               android:layout_marginRight="10dp"
                android:layout_marginBottom="10dp">
 
                <RelativeLayout
@@ -85,9 +69,9 @@
                        android:layout_width="wrap_content"
                        android:layout_height="match_parent"
                        android:background="@color/background"
-                       custom:fillColor="#6bcae2"
-                       custom:strokeColor="#75b0d0"
-                       custom:strokeWidth="20"
+                       custom:fillColor="@color/colorPrimaryLight"
+                       custom:strokeColor="@color/colorPrimary"
+                       custom:strokeWidth="10"
                        custom:value="65" />
 
                    <TextView
@@ -110,8 +94,8 @@
                    android:layout_width="0dp"
                    android:layout_height="match_parent"
                    android:layout_weight="1"
-                   android:orientation="vertical"
-                   android:background="@drawable/border_activity">
+                   android:orientation="vertical">
+                   //android:background="@color/colorPrimaryLight">
 
                    <LinearLayout
                        android:layout_width="match_parent"
@@ -126,14 +110,14 @@
                            android:layout_width="wrap_content"
                            android:layout_height="match_parent"
                            android:layout_gravity="center_vertical|left"
-                           android:text=" - Sedentary: "/>
+                           android:text=" - Sedentary: " />
 
                        <TextView
                            android:id="@+id/sedentaryMinTV"
                            android:layout_width="wrap_content"
                            android:layout_height="match_parent"
                            android:layout_gravity="center_vertical|right"
-                           android:textStyle="bold"/>
+                           android:textStyle="bold" />
 
                    </LinearLayout>
 
@@ -149,14 +133,14 @@
                            android:layout_width="wrap_content"
                            android:layout_height="match_parent"
                            android:layout_gravity="center_vertical|left"
-                           android:text=" - Lightly Active: "/>
+                           android:text=" - Lightly Active: " />
 
                        <TextView
                            android:id="@+id/lightlyActiveMinTV"
                            android:layout_width="wrap_content"
                            android:layout_height="match_parent"
                            android:layout_gravity="center_vertical|right"
-                           android:textStyle="bold"/>
+                           android:textStyle="bold" />
 
                    </LinearLayout>
 
@@ -172,14 +156,14 @@
                            android:layout_width="wrap_content"
                            android:layout_height="match_parent"
                            android:layout_gravity="center_vertical|left"
-                           android:text=" - Very Active: "/>
+                           android:text=" - Very Active: " />
 
                        <TextView
                            android:id="@+id/veryActiveMinTV"
                            android:layout_width="wrap_content"
                            android:layout_height="match_parent"
                            android:layout_gravity="center_vertical|right"
-                           android:textStyle="bold"/>
+                           android:textStyle="bold" />
 
                    </LinearLayout>
 
@@ -193,17 +177,18 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/colorPrimary">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:text="HEART RATE"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:textColor="@color/background"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -218,14 +203,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|left"
-                    android:text=" - Resting Heart Rate:  "/>
+                    android:text=" - Resting Heart Rate:  "
+                    android:textColor="@color/background"/>
 
                 <TextView
                     android:id="@+id/restingHRTV"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|right"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:textColor="@color/background"/>
 
             </LinearLayout>
 
@@ -234,8 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="100"
                 android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/border_heartrate">
+                android:layout_marginTop="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -250,28 +236,32 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="10dp"
                         android:gravity="bottom|center"
-                        android:text="Out of Range" />
+                        android:text="Out of Range"
+                        android:textColor="@color/background"/>
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginLeft="10dp"
                         android:gravity="bottom|center"
-                        android:text="Fat Burn"/>
+                        android:text="Fat Burn"
+                        android:textColor="@color/background"/>
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginLeft="10dp"
                         android:gravity="bottom|center"
-                        android:text="Cardio"/>
+                        android:text="Cardio"
+                        android:textColor="@color/background"/>
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginLeft="10dp"
                         android:gravity="bottom|center"
-                        android:text="Peak"/>
+                        android:text="Peak"
+                        android:textColor="@color/background"/>
 
                 </LinearLayout>
 
@@ -300,7 +290,8 @@
                         android:textAlignment="gravity"
                         android:textStyle="bold"
                         android:text="--%"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp"
+                        android:textColor="@color/background"/>
                     <TextView
                         android:id="@+id/fatBurnTV"
                         android:layout_width="0dp"
@@ -311,7 +302,8 @@
                         android:textAlignment="gravity"
                         android:textStyle="bold"
                         android:text="--%"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp"
+                        android:textColor="@color/background"/>
                     <TextView
                         android:id="@+id/cardioTV"
                         android:layout_width="0dp"
@@ -321,7 +313,8 @@
                         android:textAlignment="gravity"
                         android:textStyle="bold"
                         android:text="--%"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp"
+                        android:textColor="@color/background"/>
                     <TextView
                         android:id="@+id/peakTV"
                         android:layout_width="0dp"
@@ -331,7 +324,8 @@
                         android:textAlignment="gravity"
                         android:textStyle="bold"
                         android:text="--%"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp"
+                        android:textColor="@color/background"/>
 
                 </LinearLayout>
 
@@ -343,13 +337,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:text="SLEEP"
                 android:textSize="20dp"
                 android:textStyle="bold"
@@ -375,7 +367,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_margin="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -397,7 +391,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_margin="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
                         android:orientation="horizontal">
 
                         <TextView
