@@ -22,21 +22,9 @@ public class IntroActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             public void run() {
                 startActivity(intent);
-<<<<<<< HEAD
                 finish();
             }
         }, 3000);   //5 seconds
 
     }
-
-=======
-            }
-        }, 5000);   //5 seconds
-
-    }
-
-    private void goMainActivity() {
-
-    }
->>>>>>> 063eb9bd0982290fc39ed60ca04fad45cba242bb
 }

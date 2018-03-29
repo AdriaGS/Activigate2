@@ -28,11 +28,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-<<<<<<< HEAD
                 android:layout_weight="2"
-=======
-                android:layout_weight="3"
->>>>>>> 063eb9bd0982290fc39ed60ca04fad45cba242bb
                 android:src="@drawable/city4age_logo"/>
 
             <View
@@ -46,7 +42,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"
+            android:layout_weight="4"
             android:gravity="center"
             android:layout_margin="10dp"
             android:orientation="vertical">
@@ -60,22 +56,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-<<<<<<< HEAD
                 android:layout_weight="2"
-=======
-                android:layout_weight="1"
->>>>>>> 063eb9bd0982290fc39ed60ca04fad45cba242bb
                 android:visibility="invisible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-<<<<<<< HEAD
                 android:layout_weight="2"
                 android:layout_marginBottom="5dp">
-=======
-                android:layout_weight="2">
->>>>>>> 063eb9bd0982290fc39ed60ca04fad45cba242bb
 
                 <ProgressBar
                     android:layout_width="match_parent"
@@ -99,26 +87,17 @@
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="0dp"
-<<<<<<< HEAD
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:layout_margin="5dp"
                 android:layout_alignTop="@id/ipal_logo"
                 android:gravity="center|right"
-=======
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="right"
->>>>>>> 063eb9bd0982290fc39ed60ca04fad45cba242bb
                 android:textSize="20dp"
                 android:textAlignment="gravity"
                 android:text="Developed by:"/>
 
             <ImageView
-<<<<<<< HEAD
                 android:id="@+id/ipal_logo"
-=======
->>>>>>> 063eb9bd0982290fc39ed60ca04fad45cba242bb
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
