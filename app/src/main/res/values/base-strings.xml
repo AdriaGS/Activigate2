@@ -33,4 +33,5 @@
     </string>
     <string name="title_message">ACTIVIGATE</string>
     <string name="toHistoryButton">Fitbit ➤</string>
+    <string name="updateData">Update Data</string>
 </resources>

@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -64,7 +67,7 @@ public class FitbitActivity extends AppCompatActivity {
 
     TextView day;
 
-    int restingHeartRate_val;
+    int restingHeartRate_val = 0;
     int sedentaryMin_val;
     int lightlyActiveMin_val;
     int veryActiveMin_val;
@@ -73,7 +76,7 @@ public class FitbitActivity extends AppCompatActivity {
     int sleepDuration_val;
     int sleepEfficiency_val;
     int awakeningsCount_val;
-    ArrayList<Integer> minutesZones = new ArrayList<>();
+    ArrayList<Integer> minutesZones;
 
 
     @Override
@@ -104,25 +107,32 @@ public class FitbitActivity extends AppCompatActivity {
 
         circleFill = (CircleFillView) findViewById(R.id.stepsProgress);
 
-        if (getParameters()) {
-            pd = new ProgressDialog(this);
-            pd.setMessage("Please wait");
-            pd.setCancelable(false);
-            pd.show();
-
-            getHeartRate();
-            getActivity();
-            getSleep();
-        }
-        else {
-            Log.e("Error", "Some parameters returned null");
-        }
+        updateData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.update_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.updateData:
+                updateData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void getHeartRate() {
@@ -143,7 +153,7 @@ public class FitbitActivity extends AppCompatActivity {
         new getDatafromAPI().execute(myUri, authorization, "2");
     }
 
-    public void updateData(View view) {
+    public void updateData() {
 
         if (getParameters()) {
             pd = new ProgressDialog(this);
@@ -188,12 +198,18 @@ public class FitbitActivity extends AppCompatActivity {
                 JSONObject activityJson = new JSONObject(activityData).getJSONObject("summary");
                 JSONArray heartZones = activityJson.getJSONArray("heartRateZones");
 
+                minutesZones = new ArrayList<>();
                 for(int i = 0; i < heartZones.length(); i++) {
                     String zone = heartZones.getString(i);
                     minutesZones.add(new JSONObject(zone).getInt("minutes"));
                 }
 
-                restingHeartRate_val = activityJson.getInt("restingHeartRate");
+                try {
+                    restingHeartRate_val = activityJson.getInt("restingHeartRate");
+                }
+                catch (JSONException e) {
+                    Log.e("No Resting HR", "No Resting Heart Rate");
+                }
                 sedentaryMin_val = activityJson.getInt("sedentaryMinutes");
                 lightlyActiveMin_val = activityJson.getInt("lightlyActiveMinutes");
                 veryActiveMin_val = activityJson.getInt("veryActiveMinutes");
@@ -247,7 +263,7 @@ public class FitbitActivity extends AppCompatActivity {
         cardioZone.setText(String.valueOf(minutesZones.get(2)*100/totalMinutes) + "%");
         peakZone.setText(String.valueOf(minutesZones.get(3)*100/totalMinutes) + "%");
 
-        sleepDuration.setText(String.format("%02d hours, %02d min",
+        sleepDuration.setText(String.format("%02d:%02d hours",
                 TimeUnit.MILLISECONDS.toHours(sleepDuration_val),
                 TimeUnit.MILLISECONDS.toMinutes(sleepDuration_val) -
                         TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(sleepDuration_val))
