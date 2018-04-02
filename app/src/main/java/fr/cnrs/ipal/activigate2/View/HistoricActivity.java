@@ -113,10 +113,18 @@ public class HistoricActivity extends AppCompatActivity {
         for(int i = 1; i < historic.size(); i++) {
             tmp = historic.get(i).split(":");
             accumulatedTime += (Long.valueOf(tmp[0]) - lastActivityTime);
+            if(lastActivity.equals("InVehicle") && tmp[1].equals("Still")){
+                if(i < historic.size()-1) {
+                    String[] nextTmp = historic.get(i + 1).split(":");
+                    if(nextTmp[1].equals("InVehicle")) {
+                        tmp[1] = "InVehicle";
+                    }
+                }
+            }
             if(!tmp[1].equals(lastActivity)) {
+                accumulatedTime += hoursXActivity.get(lastActivity);
+                hoursXActivity.put(lastActivity, accumulatedTime);
                 lastActivity = tmp[1];
-                accumulatedTime += hoursXActivity.get(tmp[1]);
-                hoursXActivity.put(tmp[1], accumulatedTime);
                 accumulatedTime = 0;
             }
             lastActivityTime = Long.valueOf(tmp[0]);
