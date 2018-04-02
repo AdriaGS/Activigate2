@@ -8,15 +8,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +21,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import fr.cnrs.ipal.activigate2.Fitbit.OAuthToken;
 import fr.cnrs.ipal.activigate2.R;
+import fr.cnrs.ipal.activigate2.View.ViewUtils.CircleFillView;
 
 public class FitbitActivity extends AppCompatActivity {
 
@@ -119,7 +115,7 @@ public class FitbitActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.update_menu, menu);
+        inflater.inflate(R.menu.basic_menu, menu);
         return true;
     }
 
@@ -129,6 +125,15 @@ public class FitbitActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.updateData:
                 updateData();
+                return true;
+            case R.id.activityHistory:
+                Log.d("Menu", "Activity History showing");
+                return true;
+            case R.id.settings:
+                Log.d("Menu", "Settings showing");
+                return true;
+            case R.id.about:
+                Log.d("Menu", "About showing");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

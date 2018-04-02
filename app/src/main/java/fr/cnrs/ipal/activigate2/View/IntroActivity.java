@@ -22,9 +22,10 @@ public class IntroActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             public void run() {
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
             }
-        }, 3000);   //5 seconds
+        }, 2500);   //5 seconds
 
     }
 }

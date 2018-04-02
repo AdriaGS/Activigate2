@@ -42,7 +42,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_weight="5"
             android:gravity="center"
             android:layout_margin="10dp"
             android:orientation="vertical">
@@ -59,19 +59,7 @@
                 android:layout_weight="2"
                 android:visibility="invisible" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:layout_marginBottom="5dp">
 
-                <ProgressBar
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:indeterminateTint="@color/colorPrimary"
-                    android:indeterminateTintMode="src_in"/>
-
-            </LinearLayout>
 
         </LinearLayout>
 

@@ -1,15 +1,22 @@
 package fr.cnrs.ipal.activigate2.View;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -64,46 +71,16 @@ public class MainActivity extends AppCompatActivity {
             harManager.init(this, 1);
             harManager.start(this);
         }
+        invalidateOptionsMenu();
 
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver, new IntentFilter(HARService.LOCAL_BROADCAST_NAME));
 
         updateTextView();
-    }
-
-    public void onSensing(View view){
-        if(!harUtils.getIsSensing()) {
-            // Initialize the Human Activity Recognizer Manager
-            harManager.init(this, 30);
-            // Start the Sensing
-            harManager.start(this);
-            harUtils.setIsSensing(true);
-            //moveTaskToBack(true);
-        }
-        else {
-            // Stop the Sensing
-            harManager.stop(this);
-            harUtils.setIsSensing(false);
-        }
-        updateTextView();
-    }
-
-    // Broadcast Receiver to receive last activity that was sensed
-    BroadcastReceiver myReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateTextView();
-        }
-    };
-
-    public void goFitbit(View view){
-
-        Intent toFitbit = new Intent(this, LoginActivity.class);
-        startActivity(toFitbit);
-
     }
 
     @Override
@@ -118,8 +95,89 @@ public class MainActivity extends AppCompatActivity {
         save();
     }
 
-    private void updateTextView() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.basic_menu, menu);
+        MenuItem item = menu.findItem(R.id.updateData);
+        item.setVisible(false);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.activityHistory:
+                Log.d("Menu", "Activity History showing");
+                return true;
+            case R.id.settings:
+                Log.d("Menu", "Settings showing");
+                return true;
+            case R.id.about:
+                Log.d("Menu", "About showing");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void onSensing(View view){
+        if(!harUtils.getIsSensing()) {
+            startSensing();
+        }
+        else {
+            AlertDialog.Builder cancelSensing = new AlertDialog.Builder(this);
+            cancelSensing.setMessage(R.string.cancelAlertBox)
+                    .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            stopSensing();
+                        }
+                    })
+                    .setNegativeButton(R.string.notCancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            return;
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            cancelSensing.create();
+            cancelSensing.show();
+
+        }
+    }
+
+    private void startSensing() {
+        // Initialize the Human Activity Recognizer Manager
+        harManager.init(this, 30);
+        // Start the Sensing
+        harManager.start(this);
+        harUtils.setIsSensing(true);
+        //moveTaskToBack(true);
+        updateTextView();
+    }
+
+    public void stopSensing() {
+        // Stop the Sensing
+        harManager.stop(MainActivity.this);
+        harUtils.setIsSensing(false);
+        updateTextView();
+    }
+
+    // Broadcast Receiver to receive last activity that was sensed
+    BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateTextView();
+        }
+    };
+
+    public void goFitbit(View view){
+        Intent toFitbit = new Intent(this, LoginActivity.class);
+        startActivity(toFitbit);
+
+    }
+
+    private void updateTextView() {
         if (harUtils.getIsSensing()) {
             sensingButton.setBackground(getResources().getDrawable(R.drawable.stop_default));
             sensingTV.setText("Stop Recognition");
@@ -143,5 +201,6 @@ public class MainActivity extends AppCompatActivity {
     public static Object fromJson(String jsonString, Type type) {
         return new Gson().fromJson(jsonString, type);
     }
+
 }
 

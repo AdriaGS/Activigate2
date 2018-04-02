@@ -34,4 +34,10 @@
     <string name="title_message">ACTIVIGATE</string>
     <string name="toHistoryButton">Fitbit ➤</string>
     <string name="updateData">Update Data</string>
+    <string name="activityHistory">Activity History</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
+    <string name="cancelAlertBox">Cancel the sensing activity?</string>
+    <string name="cancel">Yes</string>
+    <string name="notCancel">No</string>
 </resources>

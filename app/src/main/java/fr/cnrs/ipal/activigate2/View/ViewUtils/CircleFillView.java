@@ -1,4 +1,4 @@
-package fr.cnrs.ipal.activigate2.View;
+package fr.cnrs.ipal.activigate2.View.ViewUtils;
 
 import android.content.Context;
 import android.content.res.TypedArray;

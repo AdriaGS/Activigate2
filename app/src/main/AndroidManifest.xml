@@ -22,7 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".View.MainActivity" />
 
         <service android:name=".HAR.HARService" />
@@ -39,9 +38,8 @@
                     android:scheme="activigate" />
             </intent-filter>
         </activity>
-
         <activity android:name=".View.FitbitActivity" />
-
+        <activity android:name=".View.ViewUtils.AboutActivity"></activity>
     </application>
 
 </manifest>
