@@ -34,10 +34,11 @@ public class UploadHAR {
 
     HARUtils harUtils = new HARUtils();
 
-    public void export2ICOST(String str) {
+    public void export2Server(String str) {
 
         ArrayList<String> json = createJSON(str, houseID);
         harUtils.setLastJson(json);
+        harUtils.add2History(json.get(0), str);
 
         if(isConnected()) {
             new SendCurrent().execute(json.get(1), serverURL);

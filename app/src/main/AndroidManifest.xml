@@ -39,7 +39,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.FitbitActivity" />
-        <activity android:name=".View.ViewUtils.AboutActivity"></activity>
+        <activity android:name=".View.ViewUtils.AboutActivity" />
+        <activity android:name=".View.ViewUtils.SettingsActivity" />
+        <activity android:name=".View.HistoricActivity"></activity>
     </application>
 
 </manifest>

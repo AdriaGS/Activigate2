@@ -3,6 +3,7 @@ package fr.cnrs.ipal.activigate2.HAR;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,8 @@ public class HARUtils {
     public static ArrayList<String> json2Send = new ArrayList<>();
     public static ArrayList<String> lastJson = new ArrayList<>();
 
+    public static ArrayList<String> activitiesHistory = new ArrayList<>();
+
     public static Boolean isSensing = false;
     public static Boolean canSend = true;
     public static Boolean threadRunning = false;
@@ -27,10 +30,14 @@ public class HARUtils {
     public static String lastIncludedActivity = "";
     public static long lastTimeStamp = 0;
 
+    public static final int HOUR_PER_DAY = 24;
+    public static final int MINUTES_PER_HOUR = 60;
     public static final int SECONDS_PER_MINUTE = 60;
     public static final int MILLISECONDS_PER_SECOND = 1000;
     public static int DETECTION_INTERVAL_SECONDS = 0;
     public static final int DETECTION_INTERVAL_MILLISECONDS = MILLISECONDS_PER_SECOND * DETECTION_INTERVAL_SECONDS;
+
+    public static final int MILIS_PER_DAY = MILLISECONDS_PER_SECOND*SECONDS_PER_MINUTE*MINUTES_PER_HOUR*HOUR_PER_DAY;
 
     public static String getLastSensedActivity() { return lastSensedActivity; }
 
@@ -64,6 +71,14 @@ public class HARUtils {
         return json2Send;
     }
 
+    public static void setActivitiesHistory(ArrayList<String> activitiesHistory) {
+        HARUtils.activitiesHistory = activitiesHistory;
+    }
+
+    public static ArrayList<String> getActivitiesHistory() {
+        return activitiesHistory;
+    }
+
     public static Boolean getCanSend() {
         return canSend;
     }
@@ -76,6 +91,7 @@ public class HARUtils {
         SharedPreferences sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, MyApplication.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("json2Send", array2String(json2Send));
+        editor.putString("activitiesHistory", array2String(activitiesHistory));
         editor.commit();
     }
 
@@ -102,6 +118,25 @@ public class HARUtils {
                 Log.d("Added to array", array2String(json2Send));
             }
         }
+    }
+
+    public void add2History(String date, String activity) {
+
+        String toSave = date + ":" + activity;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        long currentDate = timestamp.getTime();
+
+        for(int i = 0; i < activitiesHistory.size(); i++) {
+            String[] tmp = activitiesHistory.get(i).split(":");
+            if(Long.valueOf(tmp[0]) + MILIS_PER_DAY < currentDate) {
+                activitiesHistory.remove(i);
+            }
+            else {
+                break;
+            }
+        }
+        activitiesHistory.add(toSave);
+
     }
 
     private String array2String(ArrayList<String> json2Send) {

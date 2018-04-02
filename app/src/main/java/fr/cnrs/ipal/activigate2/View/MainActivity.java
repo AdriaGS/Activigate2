@@ -33,6 +33,8 @@ import fr.cnrs.ipal.activigate2.HAR.HARService;
 import fr.cnrs.ipal.activigate2.HAR.HARUtils;
 import fr.cnrs.ipal.activigate2.MyApplication;
 import fr.cnrs.ipal.activigate2.R;
+import fr.cnrs.ipal.activigate2.View.ViewUtils.AboutActivity;
+import fr.cnrs.ipal.activigate2.View.ViewUtils.SettingsActivity;
 //import ipal.cnrs.fr.activigate_googleapi.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String HAR_PREFERENCES = "HAR_Preferences";
 
     TextView sensingTV;
-    TextView activityTV;
     ImageButton fitbitButton;
     ImageButton sensingButton;
 
@@ -57,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Assigning TextView to variables
         sensingTV = (TextView) findViewById(R.id.sensingTextView);
-        activityTV = (TextView) findViewById(R.id.activity_tv);
         fitbitButton = (ImageButton) findViewById(R.id.fitbitDataButton);
         sensingButton = (ImageButton) findViewById(R.id.sensingButton);
 
         sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
         harUtils.setJson2Send(harUtils.string2Array(sharedPreferences.getString("json2Send", null)));
         harUtils.setLastSensedActivity(sharedPreferences.getString("lastSensedActivity", null));
+        harUtils.setActivitiesHistory(harUtils.string2Array(sharedPreferences.getString("activitiesHistory", null)));
         Boolean isSensing = sharedPreferences.getBoolean("isSensing", false);
         harUtils.setIsSensing(isSensing);
         if(isSensing) {
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
             harManager.init(this, 1);
             harManager.start(this);
         }
-        invalidateOptionsMenu();
 
     }
 
@@ -99,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.basic_menu, menu);
-        MenuItem item = menu.findItem(R.id.updateData);
-        item.setVisible(false);
         return true;
     }
 
@@ -109,13 +107,13 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.activityHistory:
-                Log.d("Menu", "Activity History showing");
+                goHistoric();
                 return true;
             case R.id.settings:
-                Log.d("Menu", "Settings showing");
+                goSettings();
                 return true;
             case R.id.about:
-                Log.d("Menu", "About showing");
+                goAbout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -177,16 +175,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void goHistoric() {
+        Intent goHistoric = new Intent(this, HistoricActivity.class);
+        startActivity(goHistoric);
+    }
+
+    private void goSettings() {
+        Intent goSettings = new Intent(this, SettingsActivity.class);
+        startActivity(goSettings);
+    }
+
+    private void goAbout() {
+        Intent goAbout = new Intent(this, AboutActivity.class);
+        startActivity(goAbout);
+    }
+
     private void updateTextView() {
         if (harUtils.getIsSensing()) {
             sensingButton.setBackground(getResources().getDrawable(R.drawable.stop_default));
             sensingTV.setText("Stop Recognition");
-            activityTV.setText("Lasted sensed activity: " + harUtils.getLastSensedActivity());
         }
         else {
             sensingButton.setBackground(getResources().getDrawable(R.drawable.start_default));
             sensingTV.setText("Start Recognition");
-            activityTV.setText("NO ACTIVITY RECOGNIZED YET");
         }
     }
 

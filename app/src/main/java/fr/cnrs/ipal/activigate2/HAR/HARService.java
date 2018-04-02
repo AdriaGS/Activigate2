@@ -60,7 +60,7 @@ public class HARService extends IntentService {
             broadcastIntent.putExtra(LOCAL_BROADCAST_EXTRA, currentActivity);
             LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
 
-            uploadActivity.export2ICOST(currentActivity);
+            uploadActivity.export2Server(currentActivity);
         }
     }
 }

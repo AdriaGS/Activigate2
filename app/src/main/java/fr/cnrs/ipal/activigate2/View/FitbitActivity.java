@@ -115,7 +115,7 @@ public class FitbitActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.basic_menu, menu);
+        inflater.inflate(R.menu.update_menu, menu);
         return true;
     }
 
@@ -125,15 +125,6 @@ public class FitbitActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.updateData:
                 updateData();
-                return true;
-            case R.id.activityHistory:
-                Log.d("Menu", "Activity History showing");
-                return true;
-            case R.id.settings:
-                Log.d("Menu", "Settings showing");
-                return true;
-            case R.id.about:
-                Log.d("Menu", "About showing");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
