@@ -24,6 +24,34 @@
 
         ]]>
     </string>
+    <string name="aboutActivigate">
+        <![CDATA[
+
+
+                Activigate is a mobile application developed at IPAL (Image & Pervasive Access Lab) inside the City4Age European project framework.
+                The app\'s main purpose is to monitor outdoor activities with the help of wereable sensors included inside the smartphone.
+                Using these sensors the app is able to classify the ongoing activity inside 7 labels (Walking, Running, Still, OnBicycle, InVehicle, Tilting, Unknown).
+                Besides this activity recognition the app can get data from the Fitbit device available on Fitbit servers. All this recollected data is then
+                sent to our servers in order to apply some reasoning and be able to detect changes in the behaviour pattern of an individual.
+
+        ]]>
+    </string>
+    <string name="aboutCity4Ages">
+        <![CDATA[
+
+            City4Age (Elderly-friendly city services for active and healthy ageing) is a research and innovation project funded by the European Commission under the Horizon 2020 Programme. The first and core objective of City4Age is to enable Ambient Assisted Cities or Age-friendly Cities. The project aims to create an innovative framework on ICT tools and services that can be deployed by European cities in order to: enhance early detection of risk related to frailty and Mild Cognitive Impairments (MCI), and provide personalised intervention that can help the elderly population to improve their daily life and also promote positive behaviour changes.
+
+        ]]>
+    </string>
+    <string name="aboutIPAL">
+        <![CDATA[
+
+            Born in 1998 as an overseas laboratory for the French National Center for Scientific Research (CNRS), it obtained in 2007 the highest rank as a mixed international research lab (UMI 2955) given by the CNRS outside France. Today, IPAL has evolved into a leading research pole in the South East Asian region.
+            IPAL research activities benefit from a close collaboration between its French academic partners (CNRS, Institute Mines-Télécom, Pierre et Marie Curie-Sorbonne Universities and University of Grenoble-Alpes) and Singaporean partner institutions (Institute for Infocomm Research/A*STAR and National University of Singapore).
+            IPAL research activities are in line with the Smart Nation initiative launched in Singapore and are supported by Horizon 2020 European Research Program.
+
+        ]]>
+    </string>
     <string name="appwork_message">
         <![CDATA[
 
@@ -40,4 +68,9 @@
     <string name="cancelAlertBox">Cancel the sensing activity?</string>
     <string name="cancel">Yes</string>
     <string name="notCancel">No</string>
+    <string name="loginBox">You must have admin priviledges to change this content...</string>
+    <string name="login">Access</string>
+    <string name="cancelLogin">Cancel</string>
+    <string name="houseIdBox">Please choose client identificator</string>
+    <string name="Ok">Set ID</string>
 </resources>

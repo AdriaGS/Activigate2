@@ -22,7 +22,7 @@ public class HARManager {
 
     public void init(Context context, int interval){
 
-        HARUtils.DETECTION_INTERVAL_SECONDS = interval;
+        Utils.DETECTION_INTERVAL_SECONDS = interval;
 
         if(mActivityRecognitionClient == null || mActivityRecognitionPendingIntent == null) {
             Intent intent = new Intent(context, HARService.class);
@@ -37,7 +37,7 @@ public class HARManager {
             return;
         }
         // Pass the update request to the requester object
-        Task task = mActivityRecognitionClient.requestActivityUpdates(HARUtils.DETECTION_INTERVAL_MILLISECONDS, mActivityRecognitionPendingIntent);
+        Task task = mActivityRecognitionClient.requestActivityUpdates(Utils.DETECTION_INTERVAL_MILLISECONDS, mActivityRecognitionPendingIntent);
     }
 
     public void stop(Context context) {

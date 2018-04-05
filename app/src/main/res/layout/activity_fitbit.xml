@@ -7,436 +7,444 @@
     android:background="@color/background"
     tools:context="fr.cnrs.ipal.activigate2.View.FitbitActivity">
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fitbit_swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/oneside_line">
-
-            <TextView
-                android:id="@+id/dayTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_gravity="center_vertical|right"
-                android:gravity="right"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:text="TODAY" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="ACTIVITY"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:layout_margin="10dp"/>
-
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="0dp"
-               android:layout_weight="100"
-               android:orientation="horizontal"
-               android:layout_marginBottom="10dp">
-
-               <RelativeLayout
-                   android:id="@+id/relativeLO"
-                   android:layout_width="0dp"
-                   android:layout_height="match_parent"
-                   android:layout_weight="1"
-                   android:gravity="center">
-
-
-                   <fr.cnrs.ipal.activigate2.View.ViewUtils.CircleFillView
-                       android:id="@+id/stepsProgress"
-                       android:layout_width="wrap_content"
-                       android:layout_height="match_parent"
-                       android:background="@color/background"
-                       custom:fillColor="@color/colorPrimaryLight"
-                       custom:strokeColor="@color/colorPrimary"
-                       custom:strokeWidth="10"
-                       custom:value="65" />
-
-                   <TextView
-                       android:id="@+id/steps"
-                       android:background="#00000000"
-                       android:layout_height="wrap_content"
-                       android:layout_width="wrap_content"
-                       android:gravity="center"
-                       android:layout_alignLeft="@id/stepsProgress"
-                       android:layout_alignTop="@id/stepsProgress"
-                       android:layout_alignRight="@id/stepsProgress"
-                       android:layout_alignBottom="@id/stepsProgress"
-                       android:text="Steps\n0"
-                       android:textSize="15dp"
-                       android:textStyle="bold"/>
-
-               </RelativeLayout>
-
-               <LinearLayout
-                   android:layout_width="0dp"
-                   android:layout_height="match_parent"
-                   android:layout_weight="1"
-                   android:orientation="vertical">
-                   //android:background="@color/colorPrimaryLight">
-
-                   <LinearLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:layout_weight="1"
-                       android:layout_marginLeft="10dp"
-                       android:layout_marginRight="10dp"
-                       android:layout_marginTop="10dp"
-                       android:orientation="horizontal">
-
-                       <TextView
-                           android:layout_width="wrap_content"
-                           android:layout_height="match_parent"
-                           android:layout_gravity="center_vertical|left"
-                           android:text=" - Sedentary: " />
-
-                       <TextView
-                           android:id="@+id/sedentaryMinTV"
-                           android:layout_width="wrap_content"
-                           android:layout_height="match_parent"
-                           android:layout_gravity="center_vertical|right"
-                           android:textStyle="bold" />
-
-                   </LinearLayout>
-
-                   <LinearLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:layout_weight="1"
-                       android:layout_marginLeft="10dp"
-                       android:layout_marginRight="10dp"
-                       android:orientation="horizontal">
-
-                       <TextView
-                           android:layout_width="wrap_content"
-                           android:layout_height="match_parent"
-                           android:layout_gravity="center_vertical|left"
-                           android:text=" - Lightly Active: " />
-
-                       <TextView
-                           android:id="@+id/lightlyActiveMinTV"
-                           android:layout_width="wrap_content"
-                           android:layout_height="match_parent"
-                           android:layout_gravity="center_vertical|right"
-                           android:textStyle="bold" />
-
-                   </LinearLayout>
-
-                   <LinearLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:layout_weight="1"
-                       android:layout_marginLeft="10dp"
-                       android:layout_marginRight="10dp"
-                       android:orientation="horizontal">
-
-                       <TextView
-                           android:layout_width="wrap_content"
-                           android:layout_height="match_parent"
-                           android:layout_gravity="center_vertical|left"
-                           android:text=" - Very Active: " />
-
-                       <TextView
-                           android:id="@+id/veryActiveMinTV"
-                           android:layout_width="wrap_content"
-                           android:layout_height="match_parent"
-                           android:layout_gravity="center_vertical|right"
-                           android:textStyle="bold" />
-
-                   </LinearLayout>
-
-               </LinearLayout>
-
-           </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="HEART RATE"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:layout_margin="10dp"
-                android:textColor="@color/background"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="10dp"
+                android:background="@drawable/oneside_line">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical|left"
-                    android:text=" - Resting Heart Rate:  "
-                    android:textColor="@color/background"/>
-
-                <TextView
-                    android:id="@+id/restingHRTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical|right"
-                    android:textStyle="bold"
-                    android:textColor="@color/background"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
-
-                <LinearLayout
+                    android:id="@+id/dayTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="bottom|center"
-                        android:text="Out of Range"
-                        android:textColor="@color/background"/>
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="bottom|center"
-                        android:text="Fat Burn"
-                        android:textColor="@color/background"/>
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="bottom|center"
-                        android:text="Cardio"
-                        android:textColor="@color/background"/>
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="bottom|center"
-                        android:text="Peak"
-                        android:textColor="@color/background"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/heart_rate_zones_bar"/>
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:gravity="right"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:text="TODAY" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ACTIVITY"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_margin="10dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:orientation="horizontal">
+                    android:layout_height="0dp"
+                    android:layout_weight="100"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
 
-                    <TextView
-                        android:id="@+id/outOfRangeTV"
+                    <RelativeLayout
+                        android:id="@+id/relativeLO"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center|top"
-                        android:textAlignment="gravity"
-                        android:textStyle="bold"
-                        android:text="--%"
-                        android:textSize="20dp"
-                        android:textColor="@color/background"/>
-                    <TextView
-                        android:id="@+id/fatBurnTV"
+                        android:gravity="center">
+
+
+                        <fr.cnrs.ipal.activigate2.View.Secondary.CircleFillView
+                            android:id="@+id/stepsProgress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@color/background"
+                            custom:fillColor="@color/colorPrimaryLight"
+                            custom:strokeColor="@color/colorPrimary"
+                            custom:strokeWidth="10"
+                            custom:value="65" />
+
+                        <TextView
+                            android:id="@+id/steps"
+                            android:background="#00000000"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:gravity="center"
+                            android:layout_alignLeft="@id/stepsProgress"
+                            android:layout_alignTop="@id/stepsProgress"
+                            android:layout_alignRight="@id/stepsProgress"
+                            android:layout_alignBottom="@id/stepsProgress"
+                            android:text="Steps\n0"
+                            android:textSize="15dp"
+                            android:textStyle="bold"/>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center|top"
-                        android:textAlignment="gravity"
-                        android:textStyle="bold"
-                        android:text="--%"
-                        android:textSize="20dp"
-                        android:textColor="@color/background"/>
-                    <TextView
-                        android:id="@+id/cardioTV"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center|top"
-                        android:textAlignment="gravity"
-                        android:textStyle="bold"
-                        android:text="--%"
-                        android:textSize="20dp"
-                        android:textColor="@color/background"/>
-                    <TextView
-                        android:id="@+id/peakTV"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center|top"
-                        android:textAlignment="gravity"
-                        android:textStyle="bold"
-                        android:text="--%"
-                        android:textSize="20dp"
-                        android:textColor="@color/background"/>
+                        android:orientation="vertical">
+                        //android:background="@color/colorPrimaryLight">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|left"
+                                android:text=" - Sedentary: " />
+
+                            <TextView
+                                android:id="@+id/sedentaryMinTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|right"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|left"
+                                android:text=" - Lightly Active: " />
+
+                            <TextView
+                                android:id="@+id/lightlyActiveMinTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|right"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|left"
+                                android:text=" - Very Active: " />
+
+                            <TextView
+                                android:id="@+id/veryActiveMinTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|right"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SLEEP"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
+                android:layout_height="0dp"
+                android:layout_weight="5"
+                android:orientation="vertical"
+                android:background="@color/colorPrimary">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="HEART RATE"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/background"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|left"
+                        android:text=" - Resting Heart Rate:  "
+                        android:textColor="@color/background"/>
+
+                    <TextView
+                        android:id="@+id/restingHRTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|right"
+                        android:textStyle="bold"
+                        android:textColor="@color/background"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="100"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="10dp"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|left"
-                            android:text=" - Duration: "/>
-
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="bottom|center"
+                            android:text="Out of Range"
+                            android:textColor="@color/background"/>
                         <TextView
-                            android:id="@+id/sleepDurationTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|right"
-                            android:textStyle="bold"/>
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="bottom|center"
+                            android:text="Fat Burn"
+                            android:textColor="@color/background"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="bottom|center"
+                            android:text="Cardio"
+                            android:textColor="@color/background"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="bottom|center"
+                            android:text="Peak"
+                            android:textColor="@color/background"/>
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <ImageView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/heart_rate_zones_bar"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|left"
-                            android:text=" - Efficiency: "/>
-
+                            android:id="@+id/outOfRangeTV"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center|top"
+                            android:textAlignment="gravity"
+                            android:textStyle="bold"
+                            android:text="--%"
+                            android:textSize="20dp"
+                            android:textColor="@color/background"/>
                         <TextView
-                            android:id="@+id/efficiencyTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|right"
-                            android:textStyle="bold"/>
+                            android:id="@+id/fatBurnTV"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center|top"
+                            android:textAlignment="gravity"
+                            android:textStyle="bold"
+                            android:text="--%"
+                            android:textSize="20dp"
+                            android:textColor="@color/background"/>
+                        <TextView
+                            android:id="@+id/cardioTV"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|top"
+                            android:textAlignment="gravity"
+                            android:textStyle="bold"
+                            android:text="--%"
+                            android:textSize="20dp"
+                            android:textColor="@color/background"/>
+                        <TextView
+                            android:id="@+id/peakTV"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|top"
+                            android:textAlignment="gravity"
+                            android:textStyle="bold"
+                            android:text="--%"
+                            android:textSize="20dp"
+                            android:textColor="@color/background"/>
 
                     </LinearLayout>
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SLEEP"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="horizontal"
-                    android:layout_gravity="center|right"
-                    android:gravity="right">
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical|right"
-                        android:gravity="right"
-                        android:text=" - Awakenings: "/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/awakeningCountTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical|right"
-                        android:gravity="right"
-                        android:layout_marginRight="10dp"
-                        android:textStyle="bold"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|left"
+                                android:text=" - Duration: "/>
+
+                            <TextView
+                                android:id="@+id/sleepDurationTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|right"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|left"
+                                android:text=" - Efficiency: "/>
+
+                            <TextView
+                                android:id="@+id/efficiencyTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|right"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center|right"
+                        android:gravity="right">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|right"
+                            android:gravity="right"
+                            android:text=" - Awakenings: "/>
+
+                        <TextView
+                            android:id="@+id/awakeningCountTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|right"
+                            android:gravity="right"
+                            android:layout_marginRight="10dp"
+                            android:textStyle="bold"/>
 
 
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -444,6 +452,6 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.constraint.ConstraintLayout>

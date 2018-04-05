@@ -2,6 +2,7 @@ package fr.cnrs.ipal.activigate2.View;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,11 +26,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate;
+import fr.cnrs.ipal.activigate2.Fitbit.OAuthServerIntf;
 import fr.cnrs.ipal.activigate2.Fitbit.OAuthToken;
+import fr.cnrs.ipal.activigate2.Fitbit.RetrofitBuilder;
 import fr.cnrs.ipal.activigate2.R;
-import fr.cnrs.ipal.activigate2.View.ViewUtils.CircleFillView;
+import fr.cnrs.ipal.activigate2.View.Secondary.CircleFillView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FitbitActivity extends AppCompatActivity {
 
@@ -62,6 +70,8 @@ public class FitbitActivity extends AppCompatActivity {
     TextView peakZone;
 
     TextView day;
+
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     int restingHeartRate_val = 0;
     int sedentaryMin_val;
@@ -96,6 +106,8 @@ public class FitbitActivity extends AppCompatActivity {
 
         day = findViewById(R.id.dayTV);
 
+        mSwipeRefreshLayout = findViewById(R.id.fitbit_swipe_refresh_layout);
+
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
 
@@ -103,7 +115,12 @@ public class FitbitActivity extends AppCompatActivity {
 
         circleFill = (CircleFillView) findViewById(R.id.stepsProgress);
 
-        updateData();
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateData();
+            }
+        });
     }
 
     @Override
@@ -112,7 +129,7 @@ public class FitbitActivity extends AppCompatActivity {
 
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.update_menu, menu);
@@ -129,7 +146,7 @@ public class FitbitActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
     private void getHeartRate() {
         String myUri = "https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json";
@@ -149,17 +166,37 @@ public class FitbitActivity extends AppCompatActivity {
         new getDatafromAPI().execute(myUri, authorization, "2");
     }
 
+    private void getDataRetrofit() {
+        OAuthServerIntf server= RetrofitBuilder.getOAuthClient(this);
+        Call<HeartRate> heartRateDataCall = server.getHeartRatedata("-", "today");
+        heartRateDataCall.enqueue(new Callback<HeartRate>() {
+            @Override
+            public void onResponse(Call<HeartRate> call, Response<HeartRate> response) {
+                Log.e("TAG","The call listFilesCall succeed with [code="+response.code()+" and has body = "+response.body()+" and message = "+response.message()+" ]");
+                if(response.isSuccessful()) {
+                    HeartRate hR = response.body();
+                    Log.d("Response", "");
+                }
+            }
+            @Override
+            public void onFailure(Call<HeartRate> call, Throwable t) {
+                Log.e("TAG","The call listFilesCall failed",t);
+            }
+        });
+    }
+
     public void updateData() {
 
         if (getParameters()) {
-            pd = new ProgressDialog(this);
+            /*pd = new ProgressDialog(this);
             pd.setMessage("Please wait");
             pd.setCancelable(false);
-            pd.show();
+            pd.show();*/
 
             getHeartRate();
             getActivity();
             getSleep();
+            getDataRetrofit();
         }
         else {
             Log.e("Error", "Some parameters returned null");
@@ -187,8 +224,8 @@ public class FitbitActivity extends AppCompatActivity {
 
     public void processResult() {
 
-        if (!heartRateData.equals("") && !activityData.equals("") && !sleepData.equals("") && pd.isShowing()) {
-            pd.dismiss();
+        if (!heartRateData.equals("") && !activityData.equals("") && !sleepData.equals("")) {
+            //pd.dismiss();
 
             try {
                 JSONObject activityJson = new JSONObject(activityData).getJSONObject("summary");
@@ -266,6 +303,8 @@ public class FitbitActivity extends AppCompatActivity {
         ));
         sleepEfficiency.setText(String.valueOf(sleepEfficiency_val) + "%");
         awakeningsCount.setText(String.valueOf(awakeningsCount_val));
+
+        mSwipeRefreshLayout.setRefreshing(false);
 
     }
 

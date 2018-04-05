@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
 
     <application
         android:name=".MyApplication"
@@ -39,8 +40,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.FitbitActivity" />
-        <activity android:name=".View.ViewUtils.AboutActivity" />
-        <activity android:name=".View.ViewUtils.SettingsActivity" />
+        <activity android:name=".View.Secondary.AboutActivity" />
+        <activity android:name=".View.Secondary.SettingsActivity" />
         <activity android:name=".View.HistoricActivity"></activity>
     </application>
 

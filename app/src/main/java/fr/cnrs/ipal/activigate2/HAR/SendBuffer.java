@@ -1,7 +1,6 @@
 package fr.cnrs.ipal.activigate2.HAR;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 
 public class SendBuffer extends AsyncTask<String, Void, String> {
 
-    HARUtils harUtils = new HARUtils();
+    Utils utils = new Utils();
 
     @Override
     protected String doInBackground(String... urls) {
@@ -22,12 +21,12 @@ public class SendBuffer extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if(!result.equals("Null")){
-            ArrayList<String> jsonRecord = harUtils.getJson2Send();
+            ArrayList<String> jsonRecord = utils.getJson2Send();
             if(jsonRecord.size() > 0) {
                 jsonRecord.remove(jsonRecord.size() - 1);
-                harUtils.setJson2Send(jsonRecord);
+                utils.setJson2Send(jsonRecord);
             }
-            harUtils.setCanSend(true);
+            utils.setCanSend(true);
         }
     }
 

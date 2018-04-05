@@ -5,21 +5,22 @@ import android.util.Log;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
+import fr.cnrs.ipal.activigate2.Logger.Logger;
 import fr.cnrs.ipal.activigate2.MyApplication;
 
 /**
  * Created by adria on 16/3/18.
  */
 
-public class HARUtils {
+public class Utils {
 
     private static final String HAR_PREFERENCES = "HAR_Preferences";
+    static Logger logger = new Logger();
 
     public static ArrayList<String> json2Send = new ArrayList<>();
     public static ArrayList<String> lastJson = new ArrayList<>();
+    public static String houseID = "";
 
     public static ArrayList<String> activitiesHistory = new ArrayList<>();
 
@@ -42,15 +43,23 @@ public class HARUtils {
     public static String getLastSensedActivity() { return lastSensedActivity; }
 
     public static void setLastSensedActivity(String activity) {
-        HARUtils.lastSensedActivity = activity;
+        Utils.lastSensedActivity = activity;
+    }
+
+    public static void setHouseID(String houseID) {
+        Utils.houseID = houseID;
+    }
+
+    public static String getHouseID() {
+        return houseID;
     }
 
     public static void setLastJson(ArrayList<String> lastJson) {
-        HARUtils.lastJson = lastJson;
+        Utils.lastJson = lastJson;
     }
 
     public static void setIsSensing(Boolean newValue) {
-        HARUtils.isSensing = newValue;
+        Utils.isSensing = newValue;
     }
 
     public static boolean getIsSensing() {
@@ -62,17 +71,17 @@ public class HARUtils {
     }
 
     public static void setThreadRunning(Boolean threadRunning) {
-        HARUtils.threadRunning = threadRunning;
+        Utils.threadRunning = threadRunning;
     }
 
-    public static void setJson2Send(ArrayList<String> json2Save) { HARUtils.json2Send = json2Save; }
+    public static void setJson2Send(ArrayList<String> json2Save) { Utils.json2Send = json2Save; }
 
     public static ArrayList<String> getJson2Send() {
         return json2Send;
     }
 
     public static void setActivitiesHistory(ArrayList<String> activitiesHistory) {
-        HARUtils.activitiesHistory = activitiesHistory;
+        Utils.activitiesHistory = activitiesHistory;
     }
 
     public static ArrayList<String> getActivitiesHistory() {
@@ -84,7 +93,7 @@ public class HARUtils {
     }
 
     public static void setCanSend(Boolean canSend) {
-        HARUtils.canSend = canSend;
+        Utils.canSend = canSend;
     }
 
     private void save() {
@@ -93,6 +102,7 @@ public class HARUtils {
         editor.putString("json2Send", array2String(json2Send));
         editor.putString("activitiesHistory", array2String(activitiesHistory));
         editor.commit();
+        logger.appendLog("Saved variables in SharedPreferences\n");
     }
 
     public void onSending(Boolean sent) {
@@ -139,7 +149,7 @@ public class HARUtils {
 
     }
 
-    private String array2String(ArrayList<String> json2Send) {
+    public String array2String(ArrayList<String> json2Send) {
         String jsonRecord = "";
         for (String temp : json2Send)
         {

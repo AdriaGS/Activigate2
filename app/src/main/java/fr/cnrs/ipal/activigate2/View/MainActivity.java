@@ -1,7 +1,5 @@
 package fr.cnrs.ipal.activigate2.View;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Context;
@@ -13,28 +11,23 @@ import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-
 import fr.cnrs.ipal.activigate2.HAR.HARManager;
 import fr.cnrs.ipal.activigate2.HAR.HARService;
-import fr.cnrs.ipal.activigate2.HAR.HARUtils;
+import fr.cnrs.ipal.activigate2.HAR.Utils;
+import fr.cnrs.ipal.activigate2.Logger.Logger;
 import fr.cnrs.ipal.activigate2.MyApplication;
 import fr.cnrs.ipal.activigate2.R;
-import fr.cnrs.ipal.activigate2.View.ViewUtils.AboutActivity;
-import fr.cnrs.ipal.activigate2.View.ViewUtils.SettingsActivity;
+import fr.cnrs.ipal.activigate2.View.Secondary.AboutActivity;
+import fr.cnrs.ipal.activigate2.View.Secondary.SettingsActivity;
 //import ipal.cnrs.fr.activigate_googleapi.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,37 +35,72 @@ public class MainActivity extends AppCompatActivity {
     private static final String HAR_PREFERENCES = "HAR_Preferences";
 
     TextView sensingTV;
+    TextView noHouseIDTV;
     ImageButton fitbitButton;
     ImageButton sensingButton;
+    EditText houseIDET;
 
     HARManager harManager = new HARManager();
-    HARUtils harUtils = new HARUtils();
+    Utils utils = new Utils();
     //private ActivityMainBinding binding;
 
     SharedPreferences sharedPreferences;
+    Logger logger = new Logger();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Assigning TextView to variables
+        // Assigning TextView and ImageViews to variables
         sensingTV = (TextView) findViewById(R.id.sensingTextView);
         fitbitButton = (ImageButton) findViewById(R.id.fitbitDataButton);
         sensingButton = (ImageButton) findViewById(R.id.sensingButton);
 
         sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
-        harUtils.setJson2Send(harUtils.string2Array(sharedPreferences.getString("json2Send", null)));
-        harUtils.setLastSensedActivity(sharedPreferences.getString("lastSensedActivity", null));
-        harUtils.setActivitiesHistory(harUtils.string2Array(sharedPreferences.getString("activitiesHistory", null)));
+        utils.setJson2Send(utils.string2Array(sharedPreferences.getString("json2Send", null)));
+        utils.setLastSensedActivity(sharedPreferences.getString("lastSensedActivity", null));
+        utils.setActivitiesHistory(utils.string2Array(sharedPreferences.getString("activitiesHistory", null)));
         Boolean isSensing = sharedPreferences.getBoolean("isSensing", false);
-        harUtils.setIsSensing(isSensing);
+        String houseId = sharedPreferences.getString("houseId", null);
+        utils.setIsSensing(isSensing);
         if(isSensing) {
             sensingButton.setBackground(getResources().getDrawable(R.drawable.stop_default));
             harManager.init(this, 1);
             harManager.start(this);
         }
+        logger.appendLog("Loaded variables in SharedPreferences\n");
+        logger.appendLog("Json2Send" + sharedPreferences.getString("json2Send", null));
+        logger.appendLog("Activities History" + sharedPreferences.getString("activitiesHistory", null));
 
+
+        if(houseId == null) {
+            LayoutInflater li = LayoutInflater.from(this);
+            View prompt = li.inflate(R.layout.house_id_popup, null);
+
+            houseIDET = prompt.findViewById(R.id.housID);
+            noHouseIDTV = prompt.findViewById(R.id.wrongID);
+
+            AlertDialog.Builder houseIdBox = new AlertDialog.Builder(this);
+            houseIdBox.setView(prompt);
+            houseIdBox.setCancelable(false);
+            houseIdBox.setMessage(R.string.houseIdBox)
+                    .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            if(houseIDET.equals("")){
+                                noHouseIDTV.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                utils.setHouseID(houseIDET.getText().toString());
+                                save();
+                                return;
+                            }
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            houseIdBox.create();
+            houseIdBox.show();
+        }
     }
 
     @Override
@@ -121,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSensing(View view){
-        if(!harUtils.getIsSensing()) {
+        if(!utils.getIsSensing()) {
             startSensing();
         }
         else {
@@ -149,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         harManager.init(this, 30);
         // Start the Sensing
         harManager.start(this);
-        harUtils.setIsSensing(true);
+        utils.setIsSensing(true);
         //moveTaskToBack(true);
         updateTextView();
     }
@@ -157,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     public void stopSensing() {
         // Stop the Sensing
         harManager.stop(MainActivity.this);
-        harUtils.setIsSensing(false);
+        utils.setIsSensing(false);
         updateTextView();
     }
 
@@ -191,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateTextView() {
-        if (harUtils.getIsSensing()) {
+        if (utils.getIsSensing()) {
             sensingButton.setBackground(getResources().getDrawable(R.drawable.stop_default));
             sensingTV.setText("Stop Recognition");
         }
@@ -204,13 +232,13 @@ public class MainActivity extends AppCompatActivity {
     private void save() {
         sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, this.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("lastSensedActivity", harUtils.getLastSensedActivity());
-        editor.putBoolean("isSensing", harUtils.getIsSensing());
+        editor.putString("json2Send", utils.array2String(utils.getJson2Send()));
+        editor.putString("activitiesHistory", utils.array2String(utils.getActivitiesHistory()));
+        editor.putString("lastSensedActivity", utils.getLastSensedActivity());
+        editor.putBoolean("isSensing", utils.getIsSensing());
+        editor.putString("houseId", utils.getHouseID());
         editor.commit();
-    }
-
-    public static Object fromJson(String jsonString, Type type) {
-        return new Gson().fromJson(jsonString, type);
+        logger.appendLog("Saved variables in SharedPreferences\n");
     }
 
 }

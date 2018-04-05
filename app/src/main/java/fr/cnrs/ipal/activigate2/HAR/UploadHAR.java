@@ -29,16 +29,16 @@ import fr.cnrs.ipal.activigate2.MyApplication;
 
 public class UploadHAR {
 
-    static String serverURL = "https://icost.ubismart.org/mobility/store";
-    static String houseID   = "97";
+    Utils utils = new Utils();
 
-    HARUtils harUtils = new HARUtils();
+    static String serverURL = "https://icost.ubismart.org/mobility/store";
+    String houseID   = utils.getHouseID();
 
     public void export2Server(String str) {
 
         ArrayList<String> json = createJSON(str, houseID);
-        harUtils.setLastJson(json);
-        harUtils.add2History(json.get(0), str);
+        utils.setLastJson(json);
+        utils.add2History(json.get(0), str);
 
         if(isConnected()) {
             new SendCurrent().execute(json.get(1), serverURL);
@@ -46,24 +46,24 @@ public class UploadHAR {
             final Thread thread = new Thread() {
                 @Override
                 public void run() {
-                    harUtils.setThreadRunning(true);
-                    ArrayList<String> jsonRecord = harUtils.getJson2Send();
-                    while (harUtils.getJson2Send().size() > 0) {
-                        if (harUtils.getCanSend()) {
-                            new SendBuffer().execute(jsonRecord.get(harUtils.getJson2Send().size() - 1), serverURL);
-                            harUtils.setCanSend(false);
+                    utils.setThreadRunning(true);
+                    ArrayList<String> jsonRecord = utils.getJson2Send();
+                    while (utils.getJson2Send().size() > 0) {
+                        if (utils.getCanSend()) {
+                            new SendBuffer().execute(jsonRecord.get(utils.getJson2Send().size() - 1), serverURL);
+                            utils.setCanSend(false);
                         }
                     }
-                    harUtils.setThreadRunning(false);
+                    utils.setThreadRunning(false);
                     return;
                 }
             };
-            if(!harUtils.getThreadRunning()) {
+            if(!utils.getThreadRunning()) {
                 thread.start();
             }
         }
         else {
-            harUtils.onSending(false);
+            utils.onSending(false);
         }
     }
 

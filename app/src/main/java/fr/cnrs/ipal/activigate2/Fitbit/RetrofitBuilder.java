@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import java.io.File;
 
 import fr.cnrs.ipal.activigate2.Fitbit.interceptors.OAuthInterceptor;
-import fr.cnrs.ipal.activigate2.Fitbit.converters.StringConverterFactory;
 
 import okhttp3.Cache;
 import okhttp3.Interceptor;
@@ -32,22 +31,6 @@ public class RetrofitBuilder {
     /***********************************************************
      * Getting OAuthServerIntf instance using Retrofit creation
      **********************************************************/
-    /**
-     * A basic client to make unauthenticated calls
-     * @param ctx
-     * @return OAuthServerIntf instance
-     */
-    public static OAuthServerIntf getSimpleClient(Context ctx) {
-        //Using Default HttpClient
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(getSimpleOkHttpClient(ctx))
-                .addConverterFactory(new StringConverterFactory())
-                .addConverterFactory(MoshiConverterFactory.create())
-                .baseUrl(BASE_URL)
-                .build();
-        OAuthServerIntf webServer = retrofit.create(OAuthServerIntf.class);
-        return webServer;
-    }
 
     /**
      * An autenticated client to make authenticated calls
@@ -61,7 +44,6 @@ public class RetrofitBuilder {
         Retrofit raCustom = new Retrofit.Builder()
                 .client(getOAuthOkHttpClient(ctx))
                 .baseUrl(BASE_URL)
-                .addConverterFactory(new StringConverterFactory())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build();
         OAuthServerIntf webServer = raCustom.create(OAuthServerIntf.class);
@@ -69,30 +51,8 @@ public class RetrofitBuilder {
     }
 
     /***********************************************************
-     * OkHttp Clients
+     * OkHttp Client
      **********************************************************/
-
-    /**
-     * Return a simple OkHttpClient v:
-     * have a cache
-     * have a HttpLogger
-     */
-    @NonNull
-    public static OkHttpClient getSimpleOkHttpClient(Context ctx) {
-        // Define the OkHttp Client with its cache!
-        // Assigning a CacheDirectory
-        File myCacheDir=new File(ctx.getCacheDir(),"OkHttpCache");
-        // You should create it...
-        int cacheSize=1024*1024;
-        Cache cacheDir=new Cache(myCacheDir,cacheSize);
-        HttpLoggingInterceptor httpLogInterceptor=new HttpLoggingInterceptor();
-        httpLogInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return new OkHttpClient.Builder()
-                //add a cache
-                .cache(cacheDir)
-                .addInterceptor(httpLogInterceptor)
-                .build();
-    }
 
     /**
      * Return a OAuth OkHttpClient v:

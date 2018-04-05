@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import fr.cnrs.ipal.activigate2.Fitbit.OAuthToken;
 import fr.cnrs.ipal.activigate2.R;
+import okhttp3.HttpUrl;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -19,6 +20,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String CLIENT_ID = "22CVHY";
     private static final String REDIRECT_URI = "activigate://callback";
     private static final String REDIRECT_URI_ROOT = "activigate";
+    private static final String SCOPE = "activity heartrate sleep";
+    private static final String CODE = "token";
+    private static final String TOKEN_EXPIRATION = "604800";
 
     private String access_token;
     private String token_type;
@@ -85,9 +89,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void makeAuthorizationRequest() {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.fitbit.com/oauth2/authorize?response_type=token" +
-                "&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI + "&scope=activity%20heartrate%20sleep&expires_in=604800"));
-        startActivity(intent);
+        HttpUrl authorizeUrl = HttpUrl.parse("https://www.fitbit.com/oauth2/authorize") //
+                .newBuilder() //
+                .addQueryParameter("response_type", CODE)
+                .addQueryParameter("client_id", CLIENT_ID)
+                .addQueryParameter("scope", SCOPE)
+                .addQueryParameter("redirect_uri", REDIRECT_URI)
+                .addQueryParameter("expires_in", TOKEN_EXPIRATION)
+                .build();
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        Log.e(TAG, "the url is : " + String.valueOf(authorizeUrl.url()));
+        i.setData(Uri.parse(String.valueOf(authorizeUrl.url())));
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
         finish();
 
     }

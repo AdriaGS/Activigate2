@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class SendCurrent extends AsyncTask<String, Void, String> {
 
-    HARUtils harUtils = new HARUtils();
+    Utils utils = new Utils();
 
     @Override
     protected String doInBackground(String... urls) {
@@ -20,11 +20,11 @@ public class SendCurrent extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if(!result.equals("Null")){
-            harUtils.onSending(true);
+            utils.onSending(true);
             Log.d("HTTP POST Result", "Data was Sent!");
         }
         else {
-            harUtils.onSending(false);
+            utils.onSending(false);
             Log.d("HTTP POST Result", "Data was not Sent, Buffering!");
         }
     }
