@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import java.io.File;
 
+import fr.cnrs.ipal.activigate2.Fitbit.converters.StringConverterFactory;
 import fr.cnrs.ipal.activigate2.Fitbit.interceptors.OAuthInterceptor;
 
 import okhttp3.Cache;
@@ -12,6 +13,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 /**
@@ -35,6 +37,7 @@ public class RetrofitBuilder {
     /**
      * An autenticated client to make authenticated calls
      * The token is automaticly added in the Header of the request
+     *
      * @param ctx
      * @return OAuthServerIntf instance
      */
@@ -44,7 +47,8 @@ public class RetrofitBuilder {
         Retrofit raCustom = new Retrofit.Builder()
                 .client(getOAuthOkHttpClient(ctx))
                 .baseUrl(BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(new StringConverterFactory())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
         OAuthServerIntf webServer = raCustom.create(OAuthServerIntf.class);
         return webServer;
@@ -59,6 +63,7 @@ public class RetrofitBuilder {
      * have a cache
      * have a HttpLogger
      * add automaticly the token in the header of each request because of the oAuthInterceptor
+     *
      * @param ctx
      * @return
      */
@@ -66,12 +71,12 @@ public class RetrofitBuilder {
     public static OkHttpClient getOAuthOkHttpClient(Context ctx) {
         // Define the OkHttp Client with its cache!
         // Assigning a CacheDirectory
-        File myCacheDir=new File(ctx.getCacheDir(),"OkHttpCache");
+        File myCacheDir = new File(ctx.getCacheDir(), "OkHttpCache");
         // You should create it...
-        int cacheSize=1024*1024;
-        Cache cacheDir=new Cache(myCacheDir,cacheSize);
-        Interceptor oAuthInterceptor=new OAuthInterceptor();
-        HttpLoggingInterceptor httpLogInterceptor=new HttpLoggingInterceptor();
+        int cacheSize = 1024 * 1024;
+        Cache cacheDir = new Cache(myCacheDir, cacheSize);
+        Interceptor oAuthInterceptor = new OAuthInterceptor();
+        HttpLoggingInterceptor httpLogInterceptor = new HttpLoggingInterceptor();
         httpLogInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
                 .cache(cacheDir)
@@ -79,4 +84,5 @@ public class RetrofitBuilder {
                 .addInterceptor(httpLogInterceptor)
                 .build();
     }
+
 }

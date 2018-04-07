@@ -1,35 +1,20 @@
 package fr.cnrs.ipal.activigate2.View;
 
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate;
+import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate.ActivitiesHeart;
+import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate.HeartRate;
 import fr.cnrs.ipal.activigate2.Fitbit.OAuthServerIntf;
 import fr.cnrs.ipal.activigate2.Fitbit.OAuthToken;
 import fr.cnrs.ipal.activigate2.Fitbit.RetrofitBuilder;
@@ -47,10 +32,6 @@ public class FitbitActivity extends AppCompatActivity {
     private String scope;
     private String authorization;
     private long expires_in;
-
-    String heartRateData = "";
-    String activityData = "";
-    String sleepData = "";
 
     ProgressDialog pd;
     CircleFillView circleFill;
@@ -129,81 +110,6 @@ public class FitbitActivity extends AppCompatActivity {
 
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.update_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.updateData:
-                updateData();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
-
-    private void getHeartRate() {
-        String myUri = "https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json";
-        heartRateData = "";
-        new getDatafromAPI().execute(myUri, authorization, "0");
-    }
-
-    private void getActivity() {
-        String myUri = "https://api.fitbit.com/1/user/-/activities/date/today.json";
-        activityData = "";
-        new getDatafromAPI().execute(myUri, authorization, "1");
-    }
-
-    private void getSleep() {
-        String myUri = "https://api.fitbit.com/1/user/-/sleep/date/today.json";
-        sleepData = "";
-        new getDatafromAPI().execute(myUri, authorization, "2");
-    }
-
-    private void getDataRetrofit() {
-        OAuthServerIntf server= RetrofitBuilder.getOAuthClient(this);
-        Call<HeartRate> heartRateDataCall = server.getHeartRatedata("-", "today");
-        heartRateDataCall.enqueue(new Callback<HeartRate>() {
-            @Override
-            public void onResponse(Call<HeartRate> call, Response<HeartRate> response) {
-                Log.e("TAG","The call listFilesCall succeed with [code="+response.code()+" and has body = "+response.body()+" and message = "+response.message()+" ]");
-                if(response.isSuccessful()) {
-                    HeartRate hR = response.body();
-                    Log.d("Response", "");
-                }
-            }
-            @Override
-            public void onFailure(Call<HeartRate> call, Throwable t) {
-                Log.e("TAG","The call listFilesCall failed",t);
-            }
-        });
-    }
-
-    public void updateData() {
-
-        if (getParameters()) {
-            /*pd = new ProgressDialog(this);
-            pd.setMessage("Please wait");
-            pd.setCancelable(false);
-            pd.show();*/
-
-            getHeartRate();
-            getActivity();
-            getSleep();
-            getDataRetrofit();
-        }
-        else {
-            Log.e("Error", "Some parameters returned null");
-        }
-
-    }
-
     private boolean getParameters() {
 
         OAuthToken oauthToken = OAuthToken.Factory.create();
@@ -222,48 +128,31 @@ public class FitbitActivity extends AppCompatActivity {
 
     }
 
-    public void processResult() {
+    public void updateData() {
 
-        if (!heartRateData.equals("") && !activityData.equals("") && !sleepData.equals("")) {
-            //pd.dismiss();
+        if (getParameters()) {
 
-            try {
-                JSONObject activityJson = new JSONObject(activityData).getJSONObject("summary");
-                JSONArray heartZones = activityJson.getJSONArray("heartRateZones");
-
-                minutesZones = new ArrayList<>();
-                for(int i = 0; i < heartZones.length(); i++) {
-                    String zone = heartZones.getString(i);
-                    minutesZones.add(new JSONObject(zone).getInt("minutes"));
+            OAuthServerIntf server= RetrofitBuilder.getOAuthClient(this);
+            Call<HeartRate> heartRateDataCall = server.getHeartRatedata("-", "today");
+            heartRateDataCall.enqueue(new Callback<HeartRate>() {
+                @Override
+                public void onResponse(Call<HeartRate> call, Response<HeartRate> response) {
+                    Log.e("TAG","The call listFilesCall succeed with [code="+response.code()+" and has body = "+response.body()+" and message = "+response.message()+" ]");
+                    if(response.isSuccessful()) {
+                        HeartRate hR = response.body();
+                        Log.d("Response General", hR.getActivitiesHeart().toString());
+                        //Log.d("Response Value", hR.getValue() == null ? "no value": hR.getValue().toString());
+                    }
                 }
-
-                try {
-                    restingHeartRate_val = activityJson.getInt("restingHeartRate");
+                @Override
+                public void onFailure(Call<HeartRate> call, Throwable t) {
+                    Log.e("TAG","The call listFilesCall failed",t);
                 }
-                catch (JSONException e) {
-                    Log.e("No Resting HR", "No Resting Heart Rate");
-                }
-                sedentaryMin_val = activityJson.getInt("sedentaryMinutes");
-                lightlyActiveMin_val = activityJson.getInt("lightlyActiveMinutes");
-                veryActiveMin_val = activityJson.getInt("veryActiveMinutes");
-                steps_val = activityJson.getInt("steps");
-                stepsGoal = new JSONObject(activityData).getJSONObject("goals").getInt("steps");
+            });
 
-
-                JSONObject sleepJson = new JSONObject(sleepData);
-                String sleep = sleepJson.getJSONArray("sleep").getString(0);
-                sleepJson = new JSONObject(sleep);
-                sleepDuration_val = sleepJson.getInt("duration");
-                sleepEfficiency_val = sleepJson.getInt("efficiency");
-                awakeningsCount_val = sleepJson.getInt("awakeningsCount");
-
-                updateView();
-
-
-            } catch (JSONException e) {
-                Log.e("JSON Exception", e.toString());
-            }
-
+        }
+        else {
+            Log.e("Error", "Some parameters returned null");
         }
 
     }
@@ -305,80 +194,6 @@ public class FitbitActivity extends AppCompatActivity {
         awakeningsCount.setText(String.valueOf(awakeningsCount_val));
 
         mSwipeRefreshLayout.setRefreshing(false);
-
-    }
-
-
-    private class getDatafromAPI extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-
-            HttpURLConnection connection = null;
-            BufferedReader reader = null;
-
-            try {
-
-                URL url = new URL(urls[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setRequestProperty("Authorization", urls[1]);
-                connection.connect();
-
-                InputStream stream = connection.getInputStream();
-
-                reader = new BufferedReader(new InputStreamReader(stream));
-
-                StringBuffer buffer = new StringBuffer();
-                String line = "";
-
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line + "\n");
-                    Log.d("Response: ", "> " + line);
-
-                }
-                switch (Integer.parseInt(urls[2])) {
-                    case 0:
-                        heartRateData = buffer.toString();
-                        return buffer.toString();
-                    case 1:
-                        activityData = buffer.toString();
-                        return buffer.toString();
-                    case 2:
-                        sleepData = buffer.toString();
-                        return buffer.toString();
-                    default:
-                        return null;
-                }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
-                }
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            // this is executed on the main thread after the process is over
-            // update your UI here
-            if(result == null) {
-                Log.e("Error", "Error on data reception");
-            }
-            processResult();
-        }
 
     }
 }
