@@ -1,6 +1,11 @@
 package fr.cnrs.ipal.activigate2.View;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,11 +18,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import fr.cnrs.ipal.activigate2.Fitbit.API.Activities.Activities;
 import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate.ActivitiesHeart;
 import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate.HeartRate;
+import fr.cnrs.ipal.activigate2.Fitbit.API.Sleep.Sleep;
+import fr.cnrs.ipal.activigate2.Fitbit.API.Sleep.SleepData;
+import fr.cnrs.ipal.activigate2.Fitbit.FitbitUtils;
 import fr.cnrs.ipal.activigate2.Fitbit.OAuthServerIntf;
 import fr.cnrs.ipal.activigate2.Fitbit.OAuthToken;
+import fr.cnrs.ipal.activigate2.Fitbit.RetrieveData;
 import fr.cnrs.ipal.activigate2.Fitbit.RetrofitBuilder;
+import fr.cnrs.ipal.activigate2.HAR.HARService;
 import fr.cnrs.ipal.activigate2.R;
 import fr.cnrs.ipal.activigate2.View.Secondary.CircleFillView;
 import retrofit2.Call;
@@ -25,13 +36,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FitbitActivity extends AppCompatActivity {
-
-    private String access_token;
-    private String token_type;
-    private String user_id;
-    private String scope;
-    private String authorization;
-    private long expires_in;
 
     ProgressDialog pd;
     CircleFillView circleFill;
@@ -65,6 +69,8 @@ public class FitbitActivity extends AppCompatActivity {
     int awakeningsCount_val;
     ArrayList<Integer> minutesZones;
 
+    FitbitUtils fbUtils = new FitbitUtils();
+    RetrieveData retrieveData = new RetrieveData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,99 +105,61 @@ public class FitbitActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateData();
+                retrieveData.updateData(FitbitActivity.this);
             }
         });
     }
 
     @Override
     protected void onResume() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver, new IntentFilter(HARService.LOCAL_BROADCAST_NAME));
         super.onResume();
 
     }
 
-    private boolean getParameters() {
-
-        OAuthToken oauthToken = OAuthToken.Factory.create();
-        access_token = oauthToken.getAccessToken();
-        token_type = oauthToken.getTokenType();
-        user_id = oauthToken.getUser_id();
-        scope = oauthToken.getScope();
-        expires_in = oauthToken.getExpiresIn();
-
-        if (user_id != null && access_token != null) {
-            authorization = token_type + " " + access_token;
-            return true;
-        } else {
-            return false;
+    // Broadcast Receiver to receive last activity that was sensed
+    BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateView();
         }
-
-    }
-
-    public void updateData() {
-
-        if (getParameters()) {
-
-            OAuthServerIntf server= RetrofitBuilder.getOAuthClient(this);
-            Call<HeartRate> heartRateDataCall = server.getHeartRatedata("-", "today");
-            heartRateDataCall.enqueue(new Callback<HeartRate>() {
-                @Override
-                public void onResponse(Call<HeartRate> call, Response<HeartRate> response) {
-                    Log.e("TAG","The call listFilesCall succeed with [code="+response.code()+" and has body = "+response.body()+" and message = "+response.message()+" ]");
-                    if(response.isSuccessful()) {
-                        HeartRate hR = response.body();
-                        Log.d("Response General", hR.getActivitiesHeart().toString());
-                        //Log.d("Response Value", hR.getValue() == null ? "no value": hR.getValue().toString());
-                    }
-                }
-                @Override
-                public void onFailure(Call<HeartRate> call, Throwable t) {
-                    Log.e("TAG","The call listFilesCall failed",t);
-                }
-            });
-
-        }
-        else {
-            Log.e("Error", "Some parameters returned null");
-        }
-
-    }
+    };
 
     private void updateView() {
 
-        int steps_percent = steps_val*100/stepsGoal;
+        int steps_percent = fbUtils.getSteps()*100/fbUtils.getStepsGoal();
 
-        steps.setText("Steps\n" + String.valueOf(steps_val));
+        steps.setText("Steps\n" + String.valueOf(fbUtils.getSteps()));
         circleFill.setValue(steps_percent);
 
         lightlyActive.setText(String.valueOf(String.format("%02d:%02d H",
-                TimeUnit.MINUTES.toHours(lightlyActiveMin_val),
-                lightlyActiveMin_val - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(lightlyActiveMin_val)))));
+                TimeUnit.MINUTES.toHours(fbUtils.getLightlyActiveMin()),
+                fbUtils.getLightlyActiveMin() - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(fbUtils.getLightlyActiveMin())))));
         sedentaryMin.setText(String.valueOf(String.format("%02d:%02d H",
-                TimeUnit.MINUTES.toHours(sedentaryMin_val),
-                sedentaryMin_val - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(sedentaryMin_val)))));
+                TimeUnit.MINUTES.toHours(fbUtils.getSedentaryMin()),
+                fbUtils.getSedentaryMin() - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(fbUtils.getSedentaryMin())))));
         veryActive.setText(String.valueOf(String.format("%02d:%02d H",
-                TimeUnit.MINUTES.toHours(veryActiveMin_val),
-                veryActiveMin_val - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(veryActiveMin_val)))));
+                TimeUnit.MINUTES.toHours(fbUtils.getVeryActiveMin()),
+                fbUtils.getVeryActiveMin() - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(fbUtils.getVeryActiveMin())))));
 
         int totalMinutes = 0;
-        for(int i = 0; i < minutesZones.size(); i++) {
-            totalMinutes += minutesZones.get(i);
+        for(int i = 0; i < fbUtils.getMinutesZones().size(); i++) {
+            totalMinutes += fbUtils.getMinutesZones().get(i);
         }
 
-        restingHeartRate.setText(String.valueOf(restingHeartRate_val) + " bpm");
-        outOfRangeZone.setText(String.valueOf(minutesZones.get(0)*100/totalMinutes) + "%");
-        fatBurnZone.setText(String.valueOf(minutesZones.get(1)*100/totalMinutes) + "%");
-        cardioZone.setText(String.valueOf(minutesZones.get(2)*100/totalMinutes) + "%");
-        peakZone.setText(String.valueOf(minutesZones.get(3)*100/totalMinutes) + "%");
+        restingHeartRate.setText(String.valueOf(fbUtils.getRestingHeartRate()) + " bpm");
+        outOfRangeZone.setText(String.valueOf(fbUtils.getMinutesZones().get(0)*100/totalMinutes) + "%");
+        fatBurnZone.setText(String.valueOf(fbUtils.getMinutesZones().get(1)*100/totalMinutes) + "%");
+        cardioZone.setText(String.valueOf(fbUtils.getMinutesZones().get(2)*100/totalMinutes) + "%");
+        peakZone.setText(String.valueOf(fbUtils.getMinutesZones().get(3)*100/totalMinutes) + "%");
 
         sleepDuration.setText(String.format("%02d:%02d hours",
-                TimeUnit.MILLISECONDS.toHours(sleepDuration_val),
-                TimeUnit.MILLISECONDS.toMinutes(sleepDuration_val) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(sleepDuration_val))
+                TimeUnit.MILLISECONDS.toHours(fbUtils.getSleepDuration()),
+                TimeUnit.MILLISECONDS.toMinutes(fbUtils.getSleepDuration()) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(fbUtils.getSleepDuration()))
         ));
-        sleepEfficiency.setText(String.valueOf(sleepEfficiency_val) + "%");
-        awakeningsCount.setText(String.valueOf(awakeningsCount_val));
+        sleepEfficiency.setText(String.valueOf(fbUtils.getSleepEfficiency()) + "%");
+        awakeningsCount.setText(String.valueOf(fbUtils.getAwakeningsCount()));
 
         mSwipeRefreshLayout.setRefreshing(false);
 

@@ -10,7 +10,7 @@ public class Sleep {
     private String dateOfSleep;
     @SerializedName("duration")
     @Expose
-    private Integer duration;
+    private Long duration;
     @SerializedName("efficiency")
     @Expose
     private Integer efficiency;
@@ -22,7 +22,7 @@ public class Sleep {
     private Levels levels;
     @SerializedName("logId")
     @Expose
-    private Integer logId;
+    private Long logId;
     @SerializedName("minutesAfterWakeup")
     @Expose
     private Integer minutesAfterWakeup;
@@ -44,6 +44,9 @@ public class Sleep {
     @SerializedName("type")
     @Expose
     private String type;
+    @SerializedName("awakeCount")
+    @Expose
+    private Integer awakeCount;
 
     public String getDateOfSleep() {
         return dateOfSleep;
@@ -53,11 +56,11 @@ public class Sleep {
         this.dateOfSleep = dateOfSleep;
     }
 
-    public Integer getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 
@@ -85,11 +88,11 @@ public class Sleep {
         this.levels = levels;
     }
 
-    public Integer getLogId() {
+    public Long getLogId() {
         return logId;
     }
 
-    public void setLogId(Integer logId) {
+    public void setLogId(Long logId) {
         this.logId = logId;
     }
 
@@ -148,5 +151,9 @@ public class Sleep {
     public void setType(String type) {
         this.type = type;
     }
+
+    public Integer getAwakeCount() { return awakeCount; }
+
+    public void setAwakeCount(Integer awakeCount) { this.awakeCount = awakeCount; }
 
 }

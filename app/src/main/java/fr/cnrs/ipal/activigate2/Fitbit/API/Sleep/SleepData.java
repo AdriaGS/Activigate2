@@ -9,16 +9,16 @@ public class SleepData {
 
     @SerializedName("sleep")
     @Expose
-    private List<SleepData> sleep = null;
+    private List<Sleep> sleep = null;
     @SerializedName("summary")
     @Expose
     private Summary_ summary;
 
-    public List<SleepData> getSleep() {
+    public List<Sleep> getSleep() {
         return sleep;
     }
 
-    public void setSleep(List<SleepData> sleep) {
+    public void setSleep(List<Sleep> sleep) {
         this.sleep = sleep;
     }
 
@@ -28,6 +28,15 @@ public class SleepData {
 
     public void setSummary(Summary_ summary) {
         this.summary = summary;
+    }
+
+    public Sleep getMainSleep() {
+        for(Sleep item: sleep) {
+            if (item.getIsMainSleep()) {
+                return item;
+            }
+        }
+        return null;
     }
 
 }

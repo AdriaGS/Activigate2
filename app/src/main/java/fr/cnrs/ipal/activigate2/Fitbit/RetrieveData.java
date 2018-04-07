@@ -1,6 +1,8 @@
 package fr.cnrs.ipal.activigate2.Fitbit;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -9,16 +11,24 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import fr.cnrs.ipal.activigate2.Fitbit.API.Activities.Activities;
 import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate.ActivitiesHeart;
+import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate.HeartRate;
+import fr.cnrs.ipal.activigate2.Fitbit.API.Sleep.SleepData;
+import fr.cnrs.ipal.activigate2.MyApplication;
+import fr.cnrs.ipal.activigate2.View.FitbitActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RetrieveData {
 
-    String heartRateData = "";
-    String activityData = "";
-    String sleepData = "";
+    FitbitUtils fbUtils = new FitbitUtils();
+
+    private static String REQUEST_DATE = "today";
+    private static String REQUEST_USER = "-";
+    public static String LOCAL_BROADCAST_NAME = "LOCAL_ACT_RECOGNITION";
+    public static String LOCAL_BROADCAST_EXTRA = "RESULT";
 
     private String access_token;
     private String token_type;
@@ -26,6 +36,83 @@ public class RetrieveData {
     private String scope;
     private String authorization;
     private long expires_in;
+
+    static boolean hrReceived = false;
+    static boolean actReceived = false;
+    static boolean sleepReceived = false;
+
+    public void updateData(Context ctx) {
+        if (getParameters()) {
+            // Heart Rate Data
+            OAuthServerIntf server= RetrofitBuilder.getOAuthClient(ctx);
+            Call<HeartRate> heartRateDataCall = server.getHeartRatedata(REQUEST_USER, REQUEST_DATE);
+            heartRateDataCall.enqueue(new Callback<HeartRate>() {
+                @Override
+                public void onResponse(Call<HeartRate> call, Response<HeartRate> response) {
+                    Log.e("TAG","The call for heart rate data succeed with [code="+response.code()+" and has body = "+response.body()+" and message = "+response.message()+" ]");
+                    if(response.isSuccessful()) {
+                        HeartRate hR = response.body();
+                        fbUtils.setMinutesZones(hR.getActivitiesHeart().get(0).getValue().getMinutesZones());
+                        fbUtils.setRestingHeartRate(hR.getActivitiesHeart().get(0).getValue().getRestingHeartRate());
+                        hrReceived = true;
+                        canUpdateView();
+                    }
+                }
+                @Override
+                public void onFailure(Call<HeartRate> call, Throwable t) {
+                    Log.e("TAG","The call for heart rate data failed",t);
+                }
+            });
+
+            //Activity Data
+            Call<Activities> activitiesDataCall = server.getActivitiesData(REQUEST_USER, REQUEST_DATE);
+            activitiesDataCall.enqueue(new Callback<Activities>() {
+                @Override
+                public void onResponse(Call<Activities> call, Response<Activities> response) {
+                    Log.e("TAG","The call for activity data succeed with [code="+response.code()+" and has body = "+response.body()+" and message = "+response.message()+" ]");
+                    if(response.isSuccessful()) {
+                        Activities actiData = response.body();
+                        fbUtils.setSteps(actiData.getSummary().getSteps());
+                        fbUtils.setStepsGoal(actiData.getGoals().getSteps());
+                        fbUtils.setSedentaryMin(actiData.getSummary().getSedentaryMinutes());
+                        fbUtils.setLightlyActiveMin(actiData.getSummary().getLightlyActiveMinutes());
+                        fbUtils.setVeryActiveMin(actiData.getSummary().getVeryActiveMinutes());
+                        actReceived = true;
+                        canUpdateView();
+                    }
+                }
+                @Override
+                public void onFailure(Call<Activities> call, Throwable t) {
+                    Log.e("TAG","The call for activity data failed",t);
+                }
+            });
+
+            //Sleep Data
+            Call<SleepData> sleepDataCall = server.getSleepData(REQUEST_USER, REQUEST_DATE);
+            sleepDataCall.enqueue(new Callback<SleepData>() {
+                @Override
+                public void onResponse(Call<SleepData> call, Response<SleepData> response) {
+                    Log.e("TAG", "The call for sleep data succeed with [code=" + response.code() + " and has body = " + response.body() + " and message = " + response.message() + " ]");
+                    if (response.isSuccessful()) {
+                        SleepData sleep = response.body();
+                        fbUtils.setSleepDuration(sleep.getMainSleep().getDuration());
+                        fbUtils.setSleepEfficiency(sleep.getMainSleep().getEfficiency());
+                        fbUtils.setAwakeningsCount(sleep.getMainSleep().getAwakeCount());
+                        sleepReceived = true;
+                        canUpdateView();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SleepData> call, Throwable t) {
+                    Log.e("TAG", "The call for sleep data failed", t);
+                }
+            });
+        }
+        else {
+            Log.e("Error", "Some parameters returned null");
+        }
+    }
 
     private boolean getParameters() {
 
@@ -45,68 +132,15 @@ public class RetrieveData {
 
     }
 
-    private void getHeartRate() {
-        String myUri = "https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json";
-        heartRateData = "";
-        new GetDatafromAPI().execute(myUri, authorization, "0");
-    }
-
-    private void getActivity() {
-        String myUri = "https://api.fitbit.com/1/user/-/activities/date/today.json";
-        activityData = "";
-        new GetDatafromAPI().execute(myUri, authorization, "1");
-    }
-
-    private void getSleep() {
-        String myUri = "https://api.fitbit.com/1/user/-/sleep/date/today.json";
-        sleepData = "";
-        new GetDatafromAPI().execute(myUri, authorization, "2");
-    }
-
-    /*public void processResult() {
-
-        if (!heartRateData.equals("") && !activityData.equals("") && !sleepData.equals("")) {
-            //pd.dismiss();
-
-            try {
-                JSONObject activityJson = new JSONObject(activityData).getJSONObject("summary");
-                JSONArray heartZones = activityJson.getJSONArray("heartRateZones");
-
-                minutesZones = new ArrayList<>();
-                for(int i = 0; i < heartZones.length(); i++) {
-                    String zone = heartZones.getString(i);
-                    minutesZones.add(new JSONObject(zone).getInt("minutes"));
-                }
-
-                try {
-                    restingHeartRate_val = activityJson.getInt("restingHeartRate");
-                }
-                catch (JSONException e) {
-                    Log.e("No Resting HR", "No Resting Heart Rate");
-                }
-                sedentaryMin_val = activityJson.getInt("sedentaryMinutes");
-                lightlyActiveMin_val = activityJson.getInt("lightlyActiveMinutes");
-                veryActiveMin_val = activityJson.getInt("veryActiveMinutes");
-                steps_val = activityJson.getInt("steps");
-                stepsGoal = new JSONObject(activityData).getJSONObject("goals").getInt("steps");
-
-
-                JSONObject sleepJson = new JSONObject(sleepData);
-                String sleep = sleepJson.getJSONArray("sleep").getString(0);
-                sleepJson = new JSONObject(sleep);
-                sleepDuration_val = sleepJson.getInt("duration");
-                sleepEfficiency_val = sleepJson.getInt("efficiency");
-                awakeningsCount_val = sleepJson.getInt("awakeningsCount");
-
-                updateView();
-
-
-            } catch (JSONException e) {
-                Log.e("JSON Exception", e.toString());
-            }
-
+    private static void canUpdateView() {
+        if(hrReceived && actReceived && sleepReceived) {
+            hrReceived = false;
+            actReceived = false;
+            sleepReceived = false;
+            Intent broadcastIntent = new Intent(LOCAL_BROADCAST_NAME);
+            broadcastIntent.putExtra(LOCAL_BROADCAST_EXTRA, FitbitActivity.class);
+            LocalBroadcastManager.getInstance(MyApplication.instance).sendBroadcast(broadcastIntent);
         }
-
-    }*/
+    }
 
 }

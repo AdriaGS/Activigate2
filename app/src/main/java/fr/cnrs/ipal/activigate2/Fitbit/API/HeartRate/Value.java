@@ -3,6 +3,7 @@ package fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.cnrs.ipal.activigate2.Fitbit.API.HeartRate.HeartRateZone;
@@ -41,6 +42,14 @@ public class Value {
 
     public void setRestingHeartRate(Integer restingHeartRate) {
         this.restingHeartRate = restingHeartRate;
+    }
+
+    public ArrayList<Integer> getMinutesZones() {
+        ArrayList<Integer> minutesZones = new ArrayList<>();
+        for(HeartRateZone zone: heartRateZones) {
+            minutesZones.add(zone.getMinutes());
+        }
+        return minutesZones;
     }
 
 }

@@ -21,8 +21,10 @@ public class HeartRate {
 
     @Override
     public String toString() {
-        String returnString = "";
-        return returnString;
+        final StringBuffer sb = new StringBuffer("{\"ActivitiesHeart\":[\n")
+                .append("\t{\n\t\t\"dateTime\": ").append(activitiesHeart.get(0).getDateTime())
+                .append("\n\t\t\"value\": {");
+        return sb.toString();
     }
 
 }

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import fr.cnrs.ipal.activigate2.MyApplication;
-import com.squareup.moshi.Json;
 
 /**
  * Created by adria on 20/3/18.
@@ -26,15 +28,20 @@ public class OAuthToken {
     /***********************************************************
      * Attributes
      **********************************************************/
-    @Json(name = "access_token")
+    @SerializedName("access_token")
+    @Expose
     private String accessToken;
-    @Json(name = "token_type")
+    @SerializedName("token_type")
+    @Expose
     private String tokenType;
-    @Json(name = "expires_in")
+    @SerializedName("expires_in")
+    @Expose
     private long expiresIn;
-    @Json(name = "user_id")
+    @SerializedName("user_id")
+    @Expose
     private String user_id;
-    @Json(name = "scope")
+    @SerializedName("scope")
+    @Expose
     private String scope;
     private long expiredAfterMilli = 0;
 
