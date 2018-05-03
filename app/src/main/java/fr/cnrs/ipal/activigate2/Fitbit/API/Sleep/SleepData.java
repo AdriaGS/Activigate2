@@ -12,7 +12,7 @@ public class SleepData {
     private List<Sleep> sleep = null;
     @SerializedName("summary")
     @Expose
-    private Summary_ summary;
+    private Summary_ summary = null;
 
     public List<Sleep> getSleep() {
         return sleep;

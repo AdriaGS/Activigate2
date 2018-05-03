@@ -7,22 +7,22 @@ public class Goals {
 
     @SerializedName("caloriesOut")
     @Expose
-    private Integer caloriesOut;
+    private Double caloriesOut = 0.0;
     @SerializedName("distance")
     @Expose
-    private Double distance;
+    private Double distance = 0.0;
     @SerializedName("floors")
     @Expose
-    private Integer floors;
+    private Integer floors = 0;
     @SerializedName("steps")
     @Expose
-    private Integer steps;
+    private Integer steps = 0;
 
-    public Integer getCaloriesOut() {
+    public Double getCaloriesOut() {
         return caloriesOut;
     }
 
-    public void setCaloriesOut(Integer caloriesOut) {
+    public void setCaloriesOut(Double caloriesOut) {
         this.caloriesOut = caloriesOut;
     }
 

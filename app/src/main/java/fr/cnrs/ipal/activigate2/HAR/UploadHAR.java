@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +42,12 @@ public class UploadHAR {
         utils.add2History(json.get(0), str);
 
         if(isConnected()) {
-            new SendCurrent().execute(json.get(1), serverURL);
+            try {
+                new SendCurrent().execute(json.get(1), serverURL);
+            }
+            catch (Exception e){
+                Toast.makeText(MyApplication.instance, "Error on sending Data", Toast.LENGTH_SHORT).show();
+            }
 
             final Thread thread = new Thread() {
                 @Override
@@ -50,8 +56,13 @@ public class UploadHAR {
                     ArrayList<String> jsonRecord = utils.getJson2Send();
                     while (utils.getJson2Send().size() > 0) {
                         if (utils.getCanSend()) {
-                            new SendBuffer().execute(jsonRecord.get(utils.getJson2Send().size() - 1), serverURL);
-                            utils.setCanSend(false);
+                            try {
+                                new SendBuffer().execute(jsonRecord.get(utils.getJson2Send().size() - 1), serverURL);
+                                utils.setCanSend(false);
+                            }
+                            catch (Exception e){
+                                Toast.makeText(MyApplication.instance, "Error on sending Data", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                     utils.setThreadRunning(false);

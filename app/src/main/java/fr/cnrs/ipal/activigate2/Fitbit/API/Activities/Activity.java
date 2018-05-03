@@ -7,40 +7,40 @@ public class Activity {
 
     @SerializedName("activityId")
     @Expose
-    private Integer activityId;
+    private Integer activityId = 0;
     @SerializedName("activityParentId")
     @Expose
-    private Integer activityParentId;
+    private Integer activityParentId = 0;
     @SerializedName("calories")
     @Expose
-    private Integer calories;
+    private Double calories = 0.0;
     @SerializedName("description")
     @Expose
-    private String description;
+    private String description = "";
     @SerializedName("distance")
     @Expose
-    private Double distance;
+    private Double distance = 0.0;
     @SerializedName("duration")
     @Expose
-    private Integer duration;
+    private Integer duration = 0;
     @SerializedName("hasStartTime")
     @Expose
-    private Boolean hasStartTime;
+    private Boolean hasStartTime = false;
     @SerializedName("isFavorite")
     @Expose
-    private Boolean isFavorite;
+    private Boolean isFavorite = false;
     @SerializedName("logId")
     @Expose
-    private Integer logId;
+    private Integer logId = 0;
     @SerializedName("name")
     @Expose
-    private String name;
+    private String name = "";
     @SerializedName("startTime")
     @Expose
-    private String startTime;
+    private String startTime = "";
     @SerializedName("steps")
     @Expose
-    private Integer steps;
+    private Integer steps = 0;
 
     public Integer getActivityId() {
         return activityId;
@@ -58,11 +58,11 @@ public class Activity {
         this.activityParentId = activityParentId;
     }
 
-    public Integer getCalories() {
+    public Double getCalories() {
         return calories;
     }
 
-    public void setCalories(Integer calories) {
+    public void setCalories(Double calories) {
         this.calories = calories;
     }
 

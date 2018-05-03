@@ -22,13 +22,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/oneside_line">
 
                 <TextView
                     android:id="@+id/dayTV"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="5dp"
@@ -36,7 +38,19 @@
                     android:gravity="right"
                     android:textSize="25dp"
                     android:textStyle="bold"
-                    android:text="TODAY" />
+                    android:text="Date: " />
+
+                <EditText
+                    android:id="@+id/datePickerET"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="datetime"
+                    android:focusable="false"
+                    android:textCursorDrawable="@null"
+                    android:textColorLink="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"/>
+
 
             </LinearLayout>
 

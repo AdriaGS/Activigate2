@@ -7,16 +7,16 @@ public class Datum {
 
     @SerializedName("datetime")
     @Expose
-    private String datetime;
+    private String datetime = "";
     @SerializedName("level")
     @Expose
-    private String level;
+    private String level = "";
     @SerializedName("seconds")
     @Expose
-    private Integer seconds;
+    private Integer seconds = 0;
     @SerializedName("dateTime")
     @Expose
-    private String dateTime;
+    private String dateTime = "";
 
     public String getDatetime() {
         return datetime;

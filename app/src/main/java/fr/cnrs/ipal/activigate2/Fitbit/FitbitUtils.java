@@ -11,6 +11,9 @@ import fr.cnrs.ipal.activigate2.View.FitbitActivity;
 
 public class FitbitUtils {
 
+    private static String REQUEST_DATE = "today";
+    private static String REQUEST_USER = "-";
+
     static int restingHeartRate = 0;
     static int sedentaryMin = 0;
     static int lightlyActiveMin = 0;
@@ -23,6 +26,15 @@ public class FitbitUtils {
     static ArrayList<Integer> minutesZones;
 
     //GETTERS
+
+
+    public static String getRequestDate() {
+        return REQUEST_DATE;
+    }
+
+    public static String getRequestUser() {
+        return REQUEST_USER;
+    }
 
     public static int getRestingHeartRate() {
         return restingHeartRate;
@@ -65,6 +77,15 @@ public class FitbitUtils {
     }
 
     //SETTERS
+
+
+    public static void setRequestDate(String requestDate) {
+        REQUEST_DATE = requestDate;
+    }
+
+    public static void setRequestUser(String requestUser) {
+        REQUEST_USER = requestUser;
+    }
 
     public static void setRestingHeartRate(int restingHeartRate) {
         FitbitUtils.restingHeartRate = restingHeartRate;

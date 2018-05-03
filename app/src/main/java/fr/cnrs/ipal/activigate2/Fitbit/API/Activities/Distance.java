@@ -7,10 +7,10 @@ public class Distance {
 
     @SerializedName("activity")
     @Expose
-    private String activity;
+    private String activity = "";
     @SerializedName("distance")
     @Expose
-    private Double distance;
+    private Double distance = 0.0;
 
     public String getActivity() {
         return activity;

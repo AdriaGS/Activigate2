@@ -7,13 +7,13 @@ public class Summary_ {
 
     @SerializedName("totalMinutesAsleep")
     @Expose
-    private Integer totalMinutesAsleep;
+    private Integer totalMinutesAsleep = 0;
     @SerializedName("totalSleepRecords")
     @Expose
-    private Integer totalSleepRecords;
+    private Integer totalSleepRecords = 0;
     @SerializedName("totalTimeInBed")
     @Expose
-    private Integer totalTimeInBed;
+    private Integer totalTimeInBed = 0;
 
     public Integer getTotalMinutesAsleep() {
         return totalMinutesAsleep;

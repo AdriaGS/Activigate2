@@ -9,62 +9,62 @@ public class Summary {
 
     @SerializedName("activityCalories")
     @Expose
-    private Integer activityCalories;
+    private Double activityCalories = 0.0;
     @SerializedName("caloriesBMR")
     @Expose
-    private Integer caloriesBMR;
+    private Double caloriesBMR = 0.0;
     @SerializedName("caloriesOut")
     @Expose
-    private Integer caloriesOut;
+    private Double caloriesOut = 0.0;
     @SerializedName("distances")
     @Expose
     private List<Distance> distances = null;
     @SerializedName("elevation")
     @Expose
-    private Double elevation;
+    private Double elevation = 0.0;
     @SerializedName("fairlyActiveMinutes")
     @Expose
-    private Integer fairlyActiveMinutes;
+    private Integer fairlyActiveMinutes = 0;
     @SerializedName("floors")
     @Expose
-    private Integer floors;
+    private Integer floors = 0;
     @SerializedName("lightlyActiveMinutes")
     @Expose
-    private Integer lightlyActiveMinutes;
+    private Integer lightlyActiveMinutes = 0;
     @SerializedName("marginalCalories")
     @Expose
-    private Integer marginalCalories;
+    private Integer marginalCalories = 0;
     @SerializedName("sedentaryMinutes")
     @Expose
-    private Integer sedentaryMinutes;
+    private Integer sedentaryMinutes = 0;
     @SerializedName("steps")
     @Expose
-    private Integer steps;
+    private Integer steps = 0;
     @SerializedName("veryActiveMinutes")
     @Expose
-    private Integer veryActiveMinutes;
+    private Integer veryActiveMinutes = 0;
 
-    public Integer getActivityCalories() {
+    public Double getActivityCalories() {
         return activityCalories;
     }
 
-    public void setActivityCalories(Integer activityCalories) {
+    public void setActivityCalories(Double activityCalories) {
         this.activityCalories = activityCalories;
     }
 
-    public Integer getCaloriesBMR() {
+    public Double getCaloriesBMR() {
         return caloriesBMR;
     }
 
-    public void setCaloriesBMR(Integer caloriesBMR) {
+    public void setCaloriesBMR(Double caloriesBMR) {
         this.caloriesBMR = caloriesBMR;
     }
 
-    public Integer getCaloriesOut() {
+    public Double getCaloriesOut() {
         return caloriesOut;
     }
 
-    public void setCaloriesOut(Integer caloriesOut) {
+    public void setCaloriesOut(Double caloriesOut) {
         this.caloriesOut = caloriesOut;
     }
 

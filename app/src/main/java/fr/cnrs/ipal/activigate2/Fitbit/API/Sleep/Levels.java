@@ -8,7 +8,7 @@ public class Levels {
 
     @SerializedName("summary")
     @Expose
-    private Summary summary;
+    private Summary summary = null;
     @SerializedName("data")
     @Expose
     private List<Datum> data = null;

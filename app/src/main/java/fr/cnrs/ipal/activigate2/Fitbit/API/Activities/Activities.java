@@ -12,10 +12,10 @@ public class Activities {
     private List<Activity> activities = null;
     @SerializedName("goals")
     @Expose
-    private Goals goals;
+    private Goals goals = null;
     @SerializedName("summary")
     @Expose
-    private Summary summary;
+    private Summary summary = null;
 
     public List<Activity> getActivities() {
         return activities;

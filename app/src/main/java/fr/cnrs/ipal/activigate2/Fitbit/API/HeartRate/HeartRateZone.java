@@ -10,16 +10,16 @@ public class HeartRateZone {
     private Float caloriesOut;
     @SerializedName("max")
     @Expose
-    private Integer max;
+    private Integer max = 0;
     @SerializedName("min")
     @Expose
-    private Integer min;
+    private Integer min = 0;
     @SerializedName("minutes")
     @Expose
-    private Integer minutes;
+    private Integer minutes = 0;
     @SerializedName("name")
     @Expose
-    private String name;
+    private String name = "";
 
     public Float getCaloriesOut() {
         return caloriesOut;

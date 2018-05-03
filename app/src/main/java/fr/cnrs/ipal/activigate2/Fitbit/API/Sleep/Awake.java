@@ -7,10 +7,10 @@ public class Awake {
 
     @SerializedName("count")
     @Expose
-    private Integer count;
+    private Integer count = 0;
     @SerializedName("minutes")
     @Expose
-    private Integer minutes;
+    private Integer minutes = 0;
 
     public Integer getCount() {
         return count;

@@ -8,10 +8,10 @@ public class ActivitiesHeart {
 
     @SerializedName("dateTime")
     @Expose
-    public String dateTime;
+    public String dateTime = "";
     @SerializedName("value")
     @Expose
-    public Value value;
+    public Value value = null;
 
     public String getDateTime() {
         return dateTime;

@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.ActivityRecognitionClient;
 import com.google.android.gms.tasks.Task;
 
@@ -27,7 +28,7 @@ public class HARManager {
         if(mActivityRecognitionClient == null || mActivityRecognitionPendingIntent == null) {
             Intent intent = new Intent(context, HARService.class);
             mActivityRecognitionPendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            mActivityRecognitionClient = new ActivityRecognitionClient(context);
+            mActivityRecognitionClient = ActivityRecognition.getClient(context);
         }
 
     }

@@ -25,8 +25,6 @@ public class RetrieveData {
 
     FitbitUtils fbUtils = new FitbitUtils();
 
-    private static String REQUEST_DATE = "today";
-    private static String REQUEST_USER = "-";
     public static String LOCAL_BROADCAST_NAME = "LOCAL_ACT_RECOGNITION";
     public static String LOCAL_BROADCAST_EXTRA = "RESULT";
 
@@ -45,7 +43,7 @@ public class RetrieveData {
         if (getParameters()) {
             // Heart Rate Data
             OAuthServerIntf server= RetrofitBuilder.getOAuthClient(ctx);
-            Call<HeartRate> heartRateDataCall = server.getHeartRatedata(REQUEST_USER, REQUEST_DATE);
+            Call<HeartRate> heartRateDataCall = server.getHeartRatedata(fbUtils.getRequestUser(), fbUtils.getRequestDate());
             heartRateDataCall.enqueue(new Callback<HeartRate>() {
                 @Override
                 public void onResponse(Call<HeartRate> call, Response<HeartRate> response) {
@@ -65,7 +63,7 @@ public class RetrieveData {
             });
 
             //Activity Data
-            Call<Activities> activitiesDataCall = server.getActivitiesData(REQUEST_USER, REQUEST_DATE);
+            Call<Activities> activitiesDataCall = server.getActivitiesData(fbUtils.getRequestUser(), fbUtils.getRequestDate());
             activitiesDataCall.enqueue(new Callback<Activities>() {
                 @Override
                 public void onResponse(Call<Activities> call, Response<Activities> response) {
@@ -88,16 +86,24 @@ public class RetrieveData {
             });
 
             //Sleep Data
-            Call<SleepData> sleepDataCall = server.getSleepData(REQUEST_USER, REQUEST_DATE);
+            Call<SleepData> sleepDataCall = server.getSleepData(fbUtils.getRequestUser(), fbUtils.getRequestDate());
             sleepDataCall.enqueue(new Callback<SleepData>() {
                 @Override
                 public void onResponse(Call<SleepData> call, Response<SleepData> response) {
                     Log.e("TAG", "The call for sleep data succeed with [code=" + response.code() + " and has body = " + response.body() + " and message = " + response.message() + " ]");
                     if (response.isSuccessful()) {
                         SleepData sleep = response.body();
-                        fbUtils.setSleepDuration(sleep.getMainSleep().getDuration());
-                        fbUtils.setSleepEfficiency(sleep.getMainSleep().getEfficiency());
-                        fbUtils.setAwakeningsCount(sleep.getMainSleep().getAwakeCount());
+                        try{
+                            fbUtils.setSleepDuration(sleep.getMainSleep().getDuration());
+                            fbUtils.setSleepEfficiency(sleep.getMainSleep().getEfficiency());
+                            fbUtils.setAwakeningsCount(sleep.getMainSleep().getAwakeCount());
+                        }
+                        catch (Exception e) {
+                            Log.e("getMainSleep", "No main sleep returned");
+                            fbUtils.setSleepDuration(0);
+                            fbUtils.setSleepEfficiency(0);
+                            fbUtils.setAwakeningsCount(0);
+                        }
                         sleepReceived = true;
                         canUpdateView();
                     }

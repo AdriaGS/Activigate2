@@ -7,25 +7,25 @@ public class Summary {
 
     @SerializedName("deep")
     @Expose
-    private Deep deep;
+    private Deep deep = null;
     @SerializedName("light")
     @Expose
-    private Light light;
+    private Light light = null;
     @SerializedName("rem")
     @Expose
-    private Rem rem;
+    private Rem rem = null;
     @SerializedName("wake")
     @Expose
-    private Wake wake;
+    private Wake wake = null;
     @SerializedName("asleep")
     @Expose
-    private Asleep asleep;
+    private Asleep asleep = null;
     @SerializedName("awake")
     @Expose
-    private Awake awake;
+    private Awake awake = null;
     @SerializedName("restless")
     @Expose
-    private Restless restless;
+    private Restless restless = null;
 
     public Deep getDeep() {
         return deep;

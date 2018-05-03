@@ -7,46 +7,46 @@ public class Sleep {
 
     @SerializedName("dateOfSleep")
     @Expose
-    private String dateOfSleep;
+    private String dateOfSleep = "";
     @SerializedName("duration")
     @Expose
-    private Long duration;
+    private Long duration = 0L;
     @SerializedName("efficiency")
     @Expose
-    private Integer efficiency;
+    private Integer efficiency = 0;
     @SerializedName("isMainSleep")
     @Expose
-    private Boolean isMainSleep;
+    private Boolean isMainSleep = false;
     @SerializedName("levels")
     @Expose
-    private Levels levels;
+    private Levels levels = null;
     @SerializedName("logId")
     @Expose
-    private Long logId;
+    private Long logId = 0L;
     @SerializedName("minutesAfterWakeup")
     @Expose
-    private Integer minutesAfterWakeup;
+    private Integer minutesAfterWakeup = 0;
     @SerializedName("minutesAsleep")
     @Expose
-    private Integer minutesAsleep;
+    private Integer minutesAsleep = 0;
     @SerializedName("minutesAwake")
     @Expose
-    private Integer minutesAwake;
+    private Integer minutesAwake = 0;
     @SerializedName("minutesToFallAsleep")
     @Expose
-    private Integer minutesToFallAsleep;
+    private Integer minutesToFallAsleep = 0;
     @SerializedName("startTime")
     @Expose
-    private String startTime;
+    private String startTime = "";
     @SerializedName("timeInBed")
     @Expose
-    private Integer timeInBed;
+    private Integer timeInBed = 0;
     @SerializedName("type")
     @Expose
-    private String type;
+    private String type = "";
     @SerializedName("awakeCount")
     @Expose
-    private Integer awakeCount;
+    private Integer awakeCount = 0;
 
     public String getDateOfSleep() {
         return dateOfSleep;

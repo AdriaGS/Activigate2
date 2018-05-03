@@ -16,6 +16,8 @@ import fr.cnrs.ipal.activigate2.MyApplication;
 public class Utils {
 
     private static final String HAR_PREFERENCES = "HAR_Preferences";
+    private static final String JSON_SEND = "json2Send";
+    private static final String ACTIVITY_HISTORY = "activitesHistoric";
     static Logger logger = new Logger();
 
     public static ArrayList<String> json2Send = new ArrayList<>();
@@ -35,8 +37,8 @@ public class Utils {
     public static final int MINUTES_PER_HOUR = 60;
     public static final int SECONDS_PER_MINUTE = 60;
     public static final int MILLISECONDS_PER_SECOND = 1000;
-    public static int DETECTION_INTERVAL_SECONDS = 0;
-    public static final int DETECTION_INTERVAL_MILLISECONDS = MILLISECONDS_PER_SECOND * DETECTION_INTERVAL_SECONDS;
+    public static int DETECTION_INTERVAL_SECONDS = 5;
+    public static int DETECTION_INTERVAL_MILLISECONDS = MILLISECONDS_PER_SECOND * DETECTION_INTERVAL_SECONDS;
 
     public static final int MILIS_PER_DAY = MILLISECONDS_PER_SECOND*SECONDS_PER_MINUTE*MINUTES_PER_HOUR*HOUR_PER_DAY;
 
@@ -94,15 +96,6 @@ public class Utils {
 
     public static void setCanSend(Boolean canSend) {
         Utils.canSend = canSend;
-    }
-
-    private void save() {
-        SharedPreferences sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, MyApplication.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("json2Send", array2String(json2Send));
-        editor.putString("activitiesHistory", array2String(activitiesHistory));
-        editor.commit();
-        logger.appendLog("Saved variables in SharedPreferences\n");
     }
 
     public void onSending(Boolean sent) {
@@ -167,6 +160,14 @@ public class Utils {
             }
         }
         return jsonArray;
+    }
+
+    private void save() {
+        SharedPreferences sharedPreferences = MyApplication.instance.getSharedPreferences(HAR_PREFERENCES, MyApplication.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(JSON_SEND, array2String(json2Send));
+        editor.putString(ACTIVITY_HISTORY, array2String(activitiesHistory));
+        editor.commit();
     }
 
 }

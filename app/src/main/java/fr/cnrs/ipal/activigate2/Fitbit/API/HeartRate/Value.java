@@ -18,7 +18,7 @@ public class Value {
     private List<HeartRateZone> heartRateZones = null;
     @SerializedName("restingHeartRate")
     @Expose
-    private Integer restingHeartRate;
+    private Integer restingHeartRate = 0;
 
     public List<Object> getCustomHeartRateZones() {
         return customHeartRateZones;
